@@ -7,5 +7,7 @@
 import UIKit
 
 final class NoteViewController: UIViewController {
+    static let storyboardItentifier: String = "NoteVC"
+    
     @IBOutlet private weak var noteTextView: UITextView!
 }

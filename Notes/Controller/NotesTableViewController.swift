@@ -7,35 +7,55 @@
 import UIKit
 
 final class NotesTableViewController: UITableViewController {
-    // private var notes: [Note] = []
+    // MARK: - Properties
+    private var noteItems: [NoteItem] = []
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = true
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
+        bindNoteItems()
     }
-
-    // MARK: - Table view data source
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+    
+    // MARK: - Setup
+    private func bindNoteItems() {
+        guard let jsonData: Data = FileReader.shared.readFileAsData(fileName: "sample", extensionType: "json"), let model = JSONParser.shared.decode([NoteItem].self, from: jsonData) else {
+            return
+        }
+        
+        noteItems = model
+        tableView.reloadData()
     }
+    
+    // MARK: - IBAction Functions
+    @IBAction private func addButtonToggled(_ sender: Any) {
+        print("add")
+    }
+}
 
+// MARK: - Table view delegate
+extension NotesTableViewController {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let noteVC = storyboard?.instantiateViewController(withIdentifier: NoteViewController.storyboardItentifier) as? NoteViewController else {
+            fatalError("No NoteViewController")
+        }
+        
+        navigationController?.pushViewController(noteVC, animated: true)
+    }
+}
+
+// MARK: - Table view data source
+extension NotesTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 100
-        // return notes.count
+        noteItems.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier,
-                                                 for: indexPath) as! NoteTableViewCell
+        guard let cell: NoteTableViewCell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier, for: indexPath) as? NoteTableViewCell else {
+            fatalError("No NoteTableViewCell")
+        }
 
-        // Configure the cell...
-
+        cell.bindCellItem(item: noteItems[indexPath.row])
         return cell
     }
     
@@ -55,7 +75,7 @@ final class NotesTableViewController: UITableViewController {
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
     */
 

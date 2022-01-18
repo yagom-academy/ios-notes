@@ -19,12 +19,18 @@ final class NoteTableViewCell: UITableViewCell {
     // MARK: - Methods
     override func awakeFromNib() {
         super.awakeFromNib()
-//        clearContents()
+        clearContents()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-//        clearContents()
+        clearContents()
+    }
+    
+    func bindCellItem(item: NoteItem) {
+        titleLabel.text = item.title
+        dateLabel.text = "\(item.lastModified)"
+        shortDescriptionLabel.text = item.body
     }
     
     // MARK: Privates
