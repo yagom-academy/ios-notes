@@ -7,7 +7,6 @@
 import UIKit
 
 final class NotesTableViewController: UITableViewController {
-
     // private var notes: [Note] = []
     
     override func viewDidLoad() {

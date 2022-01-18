@@ -7,6 +7,5 @@
 import UIKit
 
 final class NoteViewController: UIViewController {
-
     @IBOutlet private weak var noteTextView: UITextView!
 }
