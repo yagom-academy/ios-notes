@@ -7,7 +7,6 @@
 import UIKit
 
 final class NoteTableViewCell: UITableViewCell {
-    
     // MARK: - Properties
     // MARK: Reuse Identifier
     static let reuseIdentifier: String = String(describing: NoteTableViewCell.self)
