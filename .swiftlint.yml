@@ -1,0 +1,4 @@
+excluded:
+- Pods
+- Notes/Controller/SceneDelegate.swift
+- Notes/Controller/AppDelegate.swift
