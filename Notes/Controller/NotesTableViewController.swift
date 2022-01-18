@@ -9,7 +9,6 @@ import UIKit
 final class NotesTableViewController: UITableViewController {
 
     // private var notes: [Note] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -18,7 +17,6 @@ final class NotesTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
     }
 
     // MARK: - Table view data source
@@ -33,13 +31,12 @@ final class NotesTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier,
-                                                 for: indexPath) as! NoteTableViewCell
+                                                 for: indexPath) as? NoteTableViewCell ?? NoteTableViewCell()
 
         // Configure the cell...
 
         return cell
     }
-    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
