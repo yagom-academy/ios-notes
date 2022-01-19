@@ -34,4 +34,10 @@ final class NoteTableViewCell: UITableViewCell {
         dateLabel.text = nil
         shortDescriptionLabel.text = nil
     }
+    
+    func setContents(with data: NoteForm) {
+        titleLabel.text = data.title
+        dateLabel.text = "\(data.lastModified)"
+        shortDescriptionLabel.text = data.body
+    }
 }
