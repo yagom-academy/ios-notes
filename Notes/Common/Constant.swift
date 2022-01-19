@@ -6,5 +6,5 @@
 //
 
 struct Constant {
-
+    static let rotateScreenNotificationName = "UIDeviceOrientationDidChangeNotification"
 }
