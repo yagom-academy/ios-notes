@@ -28,9 +28,9 @@ struct NoteRepositoryImpl: NoteRepository {
                 let noteEntities = try context.fetch(request)
                 let noteList: [Note] = noteEntities.map { noteEntity in
                     Note(
-                        id: noteEntity.id?.uuidString,
-                        title: noteEntity.title,
-                        contents: noteEntity.contents,
+                        id: noteEntity.id?.uuidString ?? "",
+                        title: noteEntity.title ?? "",
+                        contents: noteEntity.contents ?? "",
                         date: "temp"
                     )
                 }
@@ -41,7 +41,7 @@ struct NoteRepositoryImpl: NoteRepository {
         }
     }
 
-    func note(completioin: @escaping (Note?) -> Void, id: String?) {
+    func note(id: String?, completioin: @escaping (Note?) -> Void) {
 
     }
 

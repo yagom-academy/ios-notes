@@ -136,10 +136,15 @@ When, while the lovely valley teems with vapour around me, and the meridian sun 
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="메모" id="PBn-Jr-fNX">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="EwI-G0-Ceh"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="EwI-G0-Ceh">
+                            <connections>
+                                <action selector="addButtonPressed:" destination="KwD-9G-w4t" id="k5Y-m2-CSF"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="noteTableView" destination="LSt-bh-HXT" id="e5p-AK-CnD"/>
+                        <segue destination="7Zy-wL-KH2" kind="show" identifier="moveNoteDetailIdentifier" id="oEs-AH-uqN"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ymQ-rS-hMi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -194,6 +199,9 @@ When, while the lovely valley teems with vapour around me, and the meridian sun 
             <point key="canvasLocation" x="-659.59821428571422" y="1028.985507246377"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="oEs-AH-uqN"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="ellipsis.circle" catalog="system" width="128" height="121"/>
         <systemColor name="labelColor">

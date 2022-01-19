@@ -6,8 +6,8 @@
 //
 
 struct Note {
-    let id: String?
-    let title: String?
-    let contents: String?
-    let date: String?
+    let id: String
+    let title: String
+    let contents: String
+    let date: String
 }

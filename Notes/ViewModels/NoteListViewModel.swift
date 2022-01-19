@@ -11,7 +11,7 @@ class NoteListViewModel {
     private let repository: NoteRepository = NoteRepositoryInjection.injectExpositionRepository()
     var updateView: () -> Void = {}
 
-    var noteList: [Note] = [Note]() {
+    var noteList: [Note]? {
         didSet {
             updateView()
         }
@@ -26,7 +26,7 @@ class NoteListViewModel {
 
             self.noteList = noteList
             let dummyNote = Note(id: "123", title: "title", contents: "contents", date: "date")
-            self.noteList.append(dummyNote)
+            self.noteList?.append(dummyNote)
         }
     }
 }

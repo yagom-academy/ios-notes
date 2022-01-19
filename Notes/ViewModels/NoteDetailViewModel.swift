@@ -7,6 +7,24 @@
 
 import Foundation
 
-struct NoteDetailViewModel {
+class NoteDetailViewModel {
+    private let repository: NoteRepository = NoteRepositoryInjection.injectExpositionRepository()
+    var updateView: () -> Void = {}
 
+    var note: Note? {
+        didSet {
+            updateView()
+        }
+    }
+
+    func note(id: String?) {
+        repository.note(id: id) { [weak self] note in
+            guard let self = self else { return }
+            guard let note = note else {
+                return
+            }
+
+            self.note = note
+        }
+    }
 }
