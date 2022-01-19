@@ -8,10 +8,10 @@ import UIKit
 
 final class NotesTableViewController: UITableViewController {
 
-    // private var notes: [Note] = []
+    private var notes: [Note] = []
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        notes = Decoder.decodeJSONData(type: [Note].self, from: "sample") ?? []
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = true
 
@@ -25,21 +25,20 @@ final class NotesTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 100
-        // return notes.count
+         return notes.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier,
                                                  for: indexPath) as? NoteTableViewCell ?? NoteTableViewCell()
-
-        // Configure the cell...
-
+        cell.configureCell(data: notes[indexPath.row])
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let noteView = storyboard?.instantiateViewController(withIdentifier: "NoteVC") ?? NoteViewController()
+        let noteView: NoteViewController = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as? NoteViewController ?? NoteViewController()
+        noteView.configureView(data: notes[indexPath.row])
         navigationController?.pushViewController(noteView, animated: true)
+        
     }
     /*
     // Override to support conditional editing of the table view.
