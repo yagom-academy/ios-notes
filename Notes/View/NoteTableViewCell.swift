@@ -37,7 +37,7 @@ final class NoteTableViewCell: UITableViewCell {
     
     func configureCell(data: Note) {
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko_KR")
+        dateFormatter.locale = NSLocale.current
         dateFormatter.setLocalizedDateFormatFromTemplate("yyyy.MM.dd")
         titleLabel.text = data.title
         dateLabel.text = dateFormatter.string(from: data.date)
