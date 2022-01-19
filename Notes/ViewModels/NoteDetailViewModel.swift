@@ -18,13 +18,16 @@ class NoteDetailViewModel {
     }
 
     func note(id: String?) {
+        guard let id = id else { return }
+
         repository.note(id: id) { [weak self] note in
             guard let self = self else { return }
-            guard let note = note else {
-                return
-            }
 
             self.note = note
         }
+    }
+
+    func addOrUpdateNote(id: String?) {
+
     }
 }

@@ -41,18 +41,45 @@ struct NoteRepositoryImpl: NoteRepository {
         }
     }
 
-    func note(id: String?, completioin: @escaping (Note?) -> Void) {
-
+    func note(id: String?, completion: @escaping (Note?) -> Void) {
+        let context = persistentContainer.viewContext
+        DispatchQueue.global().async {
+            do {
+                let noteEntities = try context.fetch(request)
+                let noteList: [Note] = noteEntities
+                    .filter { noteEntity in
+                        noteEntity.id?.uuidString == id
+                    }
+                    .map { noteEntity in
+                        Note(
+                            id: noteEntity.id?.uuidString ?? "",
+                            title: noteEntity.title ?? "",
+                            contents: noteEntity.contents ?? "",
+                            date: "temp"
+                        )
+                    }
+//                let note = noteList[0]
+                let note = Note(
+                    id: "idd",
+                    title: "tt",
+                    contents: "cc",
+                    date: "temp"
+                )
+                completion(note)
+            } catch {
+                fatalError("(\(#function) is error")
+            }
+        }
     }
 
-    func addOrUpdateNote() {
+    func addOrUpdateNote(id: String?) {
         let context = persistentContainer.viewContext
         let noteEntity = NoteEntity(context: context)
         noteEntity.id = UUID()
         print(noteEntity)
     }
 
-    func deleteNote() {
+    func deleteNote(id: String) {
         print("ok")
     }
 }

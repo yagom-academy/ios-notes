@@ -16,9 +16,9 @@ final class NoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setViewModel()
-        noteDetailViewModel.note(id: note?.id)
-        setViews()
+        self.setViewModel()
+        self.noteDetailViewModel.note(id: note?.id)
+        self.setViews()
     }
 
     private func setViewModel() {
@@ -26,15 +26,18 @@ final class NoteViewController: UIViewController {
             guard let self = self else { return }
 
             self.note = self.noteDetailViewModel.note
+            self.setViews()
         }
     }
 
     private func setViews() {
-        guard let note = self.note else {
-            self.noteTextView.text = ""
-            return
-        }
+        DispatchQueue.main.async {
+            guard let note = self.note else {
+                self.noteTextView.text = ""
+                return
+            }
 
-        self.noteTextView.text = note.contents
+            self.noteTextView.text = note.contents
+        }
     }
 }

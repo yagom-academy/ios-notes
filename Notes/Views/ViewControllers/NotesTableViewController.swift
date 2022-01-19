@@ -9,6 +9,7 @@ import UIKit
 final class NotesTableViewController: UITableViewController {
 
     @IBOutlet var noteTableView: UITableView!
+    
     private var noteListViewModel = NoteListViewModel()
     private var noteList: [Note]?
     private var selectedNote: Note?
@@ -16,8 +17,8 @@ final class NotesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setViewModel()
-        noteListViewModel.notes()
+        self.setViewModel()
+        self.noteListViewModel.notes()
     }
 
     private func setViewModel() {
@@ -35,7 +36,7 @@ final class NotesTableViewController: UITableViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationViewController = segue.destination as? NoteViewController
-        destinationViewController?.note = selectedNote
+        destinationViewController?.note = self.selectedNote
     }
 }
 
