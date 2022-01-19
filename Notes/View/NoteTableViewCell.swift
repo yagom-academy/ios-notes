@@ -28,6 +28,12 @@ final class NoteTableViewCell: UITableViewCell {
 //        clearContents()
     }
     
+    func configureCell(with note: JsonNote) {
+        titleLabel.text = note.title
+        dateLabel.text = DateFormatter.localizedString(from: note.date, dateStyle: .short, timeStyle: .none)
+        shortDescriptionLabel.text = note.content
+    }
+    
     // MARK: Privates
     private func clearContents() {
         titleLabel.text = nil

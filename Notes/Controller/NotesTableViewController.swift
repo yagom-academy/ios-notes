@@ -5,10 +5,14 @@
 // 
 
 import UIKit
+import CoreData
 
 final class NotesTableViewController: UITableViewController {
 
-    // private var notes: [Note] = []
+    private var notes: [JsonNote] = []
+    weak var delegate: NoteSelectionDelegate?
+    
+    //var container: NSPersistentContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,8 +20,8 @@ final class NotesTableViewController: UITableViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = true
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
+        notes = JsonNote.fectchSampleDate()
         
     }
 
@@ -27,17 +31,32 @@ final class NotesTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 100
-        // return notes.count
+        return notes.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier,
                                                  for: indexPath) as! NoteTableViewCell
-
-        // Configure the cell...
-
+        cell.configureCell(with: notes[indexPath.row])
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectNote = notes[indexPath.row]
+        guard let splitViewController = splitViewController else { return }
+        if splitViewController.viewControllers.count > 1 {
+            guard let noteNavigationViewController = splitViewController.viewControllers[1] as? UINavigationController,
+                  let noteViewController = noteNavigationViewController.topViewController as? NoteViewController else { return }
+            noteViewController.selectedNote = selectNote
+            splitViewController.showDetailViewController(noteNavigationViewController, sender: nil)
+        } else {
+            guard let noteViewController = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as? NoteViewController else { return }
+            let noteNavigationController = UINavigationController(rootViewController: noteViewController)
+            _ = noteViewController.view
+            noteViewController.selectedNote = selectNote
+            splitViewController.showDetailViewController(noteNavigationController, sender: nil)
+        }
+        
     }
     
     /*
@@ -74,4 +93,8 @@ final class NotesTableViewController: UITableViewController {
         return true
     }
     */
+}
+
+protocol NoteSelectionDelegate: AnyObject {
+    func noteSelected(_ note: JsonNote)
 }

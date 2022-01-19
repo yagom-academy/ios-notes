@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C20719A82797ED20005666EB /* JsonNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20719A72797ED20005666EB /* JsonNote.swift */; };
 		C79B80C82794568900DA9780 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B80C72794568900DA9780 /* AppDelegate.swift */; };
 		C79B80CA2794568900DA9780 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B80C92794568900DA9780 /* SceneDelegate.swift */; };
 		C79B80CF2794568900DA9780 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C79B80CD2794568900DA9780 /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C20719A72797ED20005666EB /* JsonNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonNote.swift; sourceTree = "<group>"; };
 		C79B80C42794568900DA9780 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C79B80C72794568900DA9780 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C79B80C92794568900DA9780 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				C79B80D02794568900DA9780 /* Notes.xcdatamodeld */,
+				C20719A72797ED20005666EB /* JsonNote.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 			files = (
 				C79B80C82794568900DA9780 /* AppDelegate.swift in Sources */,
 				C79B80CA2794568900DA9780 /* SceneDelegate.swift in Sources */,
+				C20719A82797ED20005666EB /* JsonNote.swift in Sources */,
 				C79B80D22794568900DA9780 /* Notes.xcdatamodeld in Sources */,
 				C79B80E1279458D700DA9780 /* NoteViewController.swift in Sources */,
 				C79B80E327945C3400DA9780 /* NoteTableViewCell.swift in Sources */,
