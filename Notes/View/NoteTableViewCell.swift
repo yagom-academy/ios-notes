@@ -37,7 +37,24 @@ final class NoteTableViewCell: UITableViewCell {
     
     func setContents(with data: NoteForm) {
         titleLabel.text = data.title
-        dateLabel.text = "\(data.lastModified)"
         shortDescriptionLabel.text = data.body
+        
+        guard let localeIdentifier = Locale.preferredLanguages.first else { return }
+//        print("-----------------")
+//        print(Locale.current.identifier)
+//        print(Locale.current.regionCode)
+//        print(Locale.current.languageCode)
+//        print(Locale.current)
+//        print(Locale.preferredLanguages.first)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        dateFormatter.locale = Locale(identifier: localeIdentifier)
+        
+        let date = Date(timeIntervalSince1970: Double(data.lastModified))
+        let stringDate = dateFormatter.string(from: date)
+        
+        dateLabel.text = stringDate
     }
 }
