@@ -8,5 +8,8 @@
 import Foundation
 
 protocol NoteRepository {
-
+    func notes(completion: @escaping ([Note]?) -> Void)
+    func note(completioin: @escaping (Note?) -> Void, id: String?)
+    func addOrUpdateNote()
+    func deleteNote()
 }

@@ -8,11 +8,23 @@ import UIKit
 
 final class NotesTableViewController: UITableViewController {
 
-    // private var notes: [Note] = []
+    @IBOutlet var noteTableView: UITableView!
+    private var noteListViewModel = NoteListViewModel()
+    private var noteList = [Note]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setViewModel()
+        noteListViewModel.notes()
+    }
+
+    private func setViewModel() {
+        self.noteListViewModel.updateView = { [weak self] in
+            guard let self = self else { return }
+
+            self.noteList = self.noteListViewModel.noteList
+        }
     }
 
     // MARK: - Table view data source
@@ -21,8 +33,7 @@ final class NotesTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
-        // return notes.count
+        return self.noteList.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -33,7 +44,9 @@ final class NotesTableViewController: UITableViewController {
             return UITableViewCell()
         }
 
-        // Configure the cell...
+        cell.titleLabel.text = noteList[indexPath.row].title
+        cell.shortDescriptionLabel.text = noteList[indexPath.row].contents
+        cell.dateLabel.text = noteList[indexPath.row].date
 
         return cell
     }
