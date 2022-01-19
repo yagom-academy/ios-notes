@@ -19,7 +19,6 @@ final class NotesTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
 
     private func fetchData() {
@@ -37,8 +36,9 @@ final class NotesTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier,
-                                                       for: indexPath) as? NoteTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: NoteTableViewCell.reuseIdentifier,
+            for: indexPath) as? NoteTableViewCell else {
             return UITableViewCell()
         }
 
@@ -55,7 +55,7 @@ final class NotesTableViewController: UITableViewController {
 
         if let noteViewController = self.noteSelectionDelegate as? NoteViewController,
            let noteNavigationViewController = noteViewController.navigationController {
-            splitViewController?.showDetailViewController(noteNavigationViewController, sender: nil)
+            self.splitViewController?.showDetailViewController(noteNavigationViewController, sender: nil)
         }
     }
 
