@@ -7,39 +7,53 @@
 import UIKit
 
 final class NotesTableViewController: UITableViewController {
-
-    // private var notes: [Note] = []
+    private var notes: [NoteModel] = []
+    
+    weak var noteViewController: NoteViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = true
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        fetchTest()
+    }
+    
+    func fetchTest() {
+        guard let jsonData: Data = FileLoader.shared.readDataSet(fileName: "sample") else {
+            return
+        }
         
+        guard let model: [NoteModel] = JSONParser.shared.decode([NoteModel].self, from: jsonData) else {
+            return
+        }
+        notes = model
     }
 
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 100
-        // return notes.count
+         notes.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier,
-                                                 for: indexPath) as! NoteTableViewCell
-
-        // Configure the cell...
+        guard let cell: NoteTableViewCell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier,
+                                                                          for: indexPath) as? NoteTableViewCell else {
+            assertionFailure()
+            return UITableViewCell()
+        }
+        cell.titleLabel.text = notes[indexPath.row].title
 
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        noteViewController?.noteModel = notes[indexPath.row]
+        splitViewController?.showDetailViewController(noteViewController!, sender: nil)
+        if splitViewController?.isCollapsed == false {
+            noteViewController?.updateView()
+        }
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
