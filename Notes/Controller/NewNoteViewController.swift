@@ -77,8 +77,9 @@ class NewNoteViewController: UIViewController {
 
         let noteEntity = UserNotes(entity: entity, insertInto: context)
         noteEntity.setValue(UUID(), forKey: "id")
-        noteEntity.setValue("  ", forKey: "noteBody")
-        noteEntity.setValue("  ", forKey: "lastModifiedDate")
+        noteEntity.setValue(noteTextView.text, forKey: "noteBody")
+        let time = Double(Date().timeIntervalSince1970)
+        noteEntity.setValue(time, forKey: "lastModifiedDate")
         
         do {
             try context.save()

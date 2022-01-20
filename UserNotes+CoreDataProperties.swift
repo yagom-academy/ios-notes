@@ -18,7 +18,7 @@ extension UserNotes {
     
     @NSManaged public var id: UUID?
     @NSManaged public var noteBody: String?
-    @NSManaged public var lastModifiedDate: String?
+    @NSManaged public var lastModifiedDate: Double
 
 }
 
