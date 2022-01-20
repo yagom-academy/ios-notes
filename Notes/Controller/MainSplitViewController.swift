@@ -10,71 +10,36 @@ import UIKit
 class MainSplitViewController: UISplitViewController {
 
     // TODO: 데이터 코어데이터로 대체
-    lazy var notes: [String] = {
-        var arr = [String]()
+    lazy var notes: [Note] = {
+        var arr = [Note]()
         for num in 0..<10 {
-            arr.append("dummy \(num)")
+            arr.append(Note(title: "Dummy\(num)", lastModified: Date(), content: "dummy\(num)"))
         }
         return arr
     }()
-    private var currentPosition: Int?
-
-    private var isCompactWidth: Bool = true
-    private var noteViewNavigationController: UINavigationController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        updateWidthStateBySizeClass()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        updateWidthStateBySizeClass()
-        noteViewNavigationController?.dismiss(animated: true, completion: nil)
     }
 
-    func showNote() {
-        guard let currentPosition = currentPosition else {
-            return
+    func showNote(position: Int) {
+        guard let noteNavigationViewController = storyboard?
+                .instantiateViewController(withIdentifier: "NoteNVC") as? UINavigationController,
+              let noteViewController = noteNavigationViewController.topViewController as? NoteViewController else {
+                  fatalError("StoryboardID mismatch or failed type casting")
         }
 
-        let selectedNote = notes[currentPosition]
-        guard let noteViewController = storyboard?
-                .instantiateViewController(withIdentifier: "NoteVC") as? NoteViewController else {
-            fatalError("StoryboardID mismatch or type casting failed")
-        }
+        let selectedNote = notes[position]
         noteViewController.note = selectedNote
-        if isCompactWidth {
-            showDetailViewController(noteViewController, sender: nil)
-        } else {
-            noteViewNavigationController?.popToRootViewController(animated: false)
-            noteViewNavigationController?.pushViewController(noteViewController, animated: false)
-        }
-
+        showDetailViewController(noteNavigationViewController, sender: nil)
     }
-
-    func updateWidthStateBySizeClass() {
-        let widthSizeClass = self.traitCollection.horizontalSizeClass
-        switch widthSizeClass {
-        case .compact:
-            isCompactWidth = true
-        case .regular:
-            isCompactWidth = false
-            if noteViewNavigationController == nil,
-               self.viewControllers.count == 2,
-               let secondViewController = self.viewControllers.last as? UINavigationController {
-                noteViewNavigationController = secondViewController
-            }
-            // TODO: 선택된 row가 있으면 메모창을 띄우도록 해야함
-        default:
-            fatalError("unknown size class")
-    }
-}
-
 }
 
 extension MainSplitViewController: UITableViewDelegate, UITableViewDataSource {
-
     // MARK: - Table view data source
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -89,16 +54,17 @@ extension MainSplitViewController: UITableViewDelegate, UITableViewDataSource {
                                                        for: indexPath) as? NoteTableViewCell else {
             fatalError()
         }
-
         let note = notes[indexPath.row]
-        cell.titleLabel.text = note
+        cell.titleLabel.text = note.title
+        cell.dateLabel.text = DateFormatter.localizedString(from: note.lastModified,
+                                                            dateStyle: .long, timeStyle: .none)
+        cell.shortDescriptionLabel.text = note.content
 
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        currentPosition = indexPath.row
-        showNote()
+        showNote(position: indexPath.row)
     }
 
     /*

@@ -10,10 +10,14 @@ final class NoteViewController: UIViewController {
 
     @IBOutlet private weak var noteTextView: UITextView!
 
-    var note: String?
+    var note: Note?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        noteTextView.text = note
+        noteTextView.text = note?.title
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        print("TableVC disappeared")
     }
 }
