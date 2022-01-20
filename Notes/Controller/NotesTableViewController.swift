@@ -53,8 +53,9 @@ final class NotesTableViewController: UITableViewController {
 extension NotesTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.noteSelected(noteItems[indexPath.row])
-        if let noteViewController: NoteViewController = delegate as? NoteViewController {
-            splitViewController?.showDetailViewController(noteViewController, sender: nil)
+        if let noteViewController: NoteViewController = delegate as? NoteViewController,
+           let secondaryNavController: UINavigationController = noteViewController.navigationController {
+            splitViewController?.showDetailViewController(secondaryNavController, sender: nil)
         }
     }
 }

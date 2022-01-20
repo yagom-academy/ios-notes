@@ -29,7 +29,7 @@ final class NoteTableViewCell: UITableViewCell {
     
     func bind(item: NoteItem) {
         titleLabel.text = item.title
-        dateLabel.text = "\(item.lastModified)"
+        dateLabel.text = item.lastModifiedDate.dateString()
         shortDescriptionLabel.text = item.body
     }
     
