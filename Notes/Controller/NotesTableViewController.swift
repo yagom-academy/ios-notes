@@ -37,8 +37,14 @@ final class NotesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let noteView: NoteViewController = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as? NoteViewController ?? NoteViewController()
         noteView.configureView(data: notes[indexPath.row])
-        navigationController?.pushViewController(noteView, animated: true)
-        
+        if UITraitCollection.current.horizontalSizeClass == .compact {
+            navigationController?.pushViewController(noteView, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
+            
+        } else {
+            guard let secondeNavigationController: UINavigationController = splitViewController?.viewControllers[1] as? UINavigationController else { return }
+            secondeNavigationController.pushViewController(noteView, animated: true)
+        }
     }
     /*
     // Override to support conditional editing of the table view.
