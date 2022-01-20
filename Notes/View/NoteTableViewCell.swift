@@ -35,12 +35,12 @@ final class NoteTableViewCell: UITableViewCell {
         shortDescriptionLabel.text = nil
     }
     
-    func configureCell(data: Note) {
+    func configureCell(data: NoteEntity) {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = NSLocale.current
         dateFormatter.setLocalizedDateFormatFromTemplate("yyyy.MM.dd")
         titleLabel.text = data.title
-        dateLabel.text = dateFormatter.string(from: data.date)
+        dateLabel.text = dateFormatter.string(from: data.date ?? Date())
         shortDescriptionLabel.text = data.body
     }
 }
