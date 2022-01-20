@@ -72,14 +72,71 @@ struct NoteRepositoryImpl: NoteRepository {
         }
     }
 
-    func addOrUpdateNote(id: String?) {
+    func addOrUpdateNote(note: Note, completion: @escaping () -> Void) {
         let context = persistentContainer.viewContext
-        let noteEntity = NoteEntity(context: context)
-        noteEntity.id = UUID()
-        print(noteEntity)
+
+        DispatchQueue.global().async {
+            do {
+                let noteEntities = try context.fetch(request)
+                let noteEntityList: [NoteEntity] = noteEntities
+                    .filter { noteEntity in
+                        noteEntity.id?.uuidString == note.id
+                    }
+
+                let noteCount = noteEntityList.count
+                guard noteCount > 0 else {
+                    // add
+                    let noteEntity = NoteEntity(context: context)
+                    noteEntity.id = UUID(uuidString: note.id)
+                    noteEntity.title = note.title
+                    noteEntity.contents = note.contents
+
+                    self.saveNotes()
+                    completion()
+                    return
+                }
+
+                // update
+                let noteEntity = noteEntityList[0]
+                noteEntity.setValue(note.contents, forKey: "contents")
+
+                self.saveNotes()
+                completion()
+            } catch {
+                fatalError("(\(#function) is error")
+            }
+        }
     }
 
-    func deleteNote(id: String) {
-        print("ok")
+    func deleteNote(note: Note, completion: @escaping () -> Void) {
+        let context = persistentContainer.viewContext
+
+        DispatchQueue.global().async {
+            do {
+                let noteEntities = try context.fetch(request)
+                let noteEntityList: [NoteEntity] = noteEntities
+                    .filter { noteEntity in
+                        noteEntity.id?.uuidString == note.id
+                    }
+
+                let noteEntity = noteEntityList[0]
+                context.delete(noteEntity)
+
+                self.saveNotes()
+                completion()
+            } catch {
+                fatalError("(\(#function) is error")
+            }
+        }
+    }
+
+    private func saveNotes() {
+        let context = persistentContainer.viewContext
+
+        do {
+            try context.save()
+        } catch {
+            fatalError("cannot save context")
+        }
     }
 }

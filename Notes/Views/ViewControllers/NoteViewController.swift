@@ -40,4 +40,20 @@ final class NoteViewController: UIViewController {
             self.noteTextView.text = note.contents
         }
     }
+
+    private func addOrUpdateNote() {
+        guard let note = self.note else { return }
+
+        self.noteDetailViewModel.addOrUpdateNote(note: note) {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+
+    private func deleteNote() {
+        guard let note = self.note else { return }
+
+        self.noteDetailViewModel.deleteNote(note: note) {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
 }

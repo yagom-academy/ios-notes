@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 class NoteDetailViewModel {
     private let repository: NoteRepository = NoteRepositoryInjection.injectExpositionRepository()
@@ -27,7 +28,15 @@ class NoteDetailViewModel {
         }
     }
 
-    func addOrUpdateNote(id: String?) {
+    func addOrUpdateNote(note: Note, completion: @escaping () -> Void) {
+        repository.addOrUpdateNote(note: note) {
+            completion()
+        }
+    }
 
+    func deleteNote(note: Note, completion: @escaping () -> Void) {
+        repository.deleteNote(note: note) {
+            completion()
+        }
     }
 }

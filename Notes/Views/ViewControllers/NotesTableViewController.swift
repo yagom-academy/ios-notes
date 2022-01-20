@@ -26,6 +26,7 @@ final class NotesTableViewController: UITableViewController {
             guard let self = self else { return }
 
             self.noteList = self.noteListViewModel.noteList
+            self.noteTableView.reloadData()
         }
     }
 
