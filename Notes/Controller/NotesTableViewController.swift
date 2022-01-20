@@ -21,9 +21,15 @@ final class NotesTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
     }
-
+    
+    
+    @IBAction func touchUpAddButton(_ sender: Any) {
+        let newNoteView = NewNoteViewController()
+        newNoteView.modalPresentationStyle = .fullScreen
+        self.present(newNoteView, animated: true, completion: nil)
+    }
+    
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
