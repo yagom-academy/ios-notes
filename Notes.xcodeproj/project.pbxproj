@@ -16,6 +16,8 @@
 		6EDC38A42797EFE2000BC3D9 /* NoteSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDC38A32797EFE2000BC3D9 /* NoteSplitViewController.swift */; };
 		6EDC38A627980B52000BC3D9 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDC38A527980B52000BC3D9 /* Note.swift */; };
 		6EDC38A8279825C1000BC3D9 /* NoteRepositoryInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDC38A7279825C1000BC3D9 /* NoteRepositoryInjection.swift */; };
+		6EDC38AA279906D6000BC3D9 /* ActionSheetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDC38A9279906D6000BC3D9 /* ActionSheetType.swift */; };
+		6EDC38AC27991CAE000BC3D9 /* AlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDC38AB27991CAE000BC3D9 /* AlertType.swift */; };
 		C79B80C82794568900DA9780 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B80C72794568900DA9780 /* AppDelegate.swift */; };
 		C79B80CA2794568900DA9780 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B80C92794568900DA9780 /* SceneDelegate.swift */; };
 		C79B80CF2794568900DA9780 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C79B80CD2794568900DA9780 /* Main.storyboard */; };
@@ -38,6 +40,8 @@
 		6EDC38A32797EFE2000BC3D9 /* NoteSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteSplitViewController.swift; sourceTree = "<group>"; };
 		6EDC38A527980B52000BC3D9 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		6EDC38A7279825C1000BC3D9 /* NoteRepositoryInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteRepositoryInjection.swift; sourceTree = "<group>"; };
+		6EDC38A9279906D6000BC3D9 /* ActionSheetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheetType.swift; sourceTree = "<group>"; };
+		6EDC38AB27991CAE000BC3D9 /* AlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertType.swift; sourceTree = "<group>"; };
 		AA5551CDC6B54708C8620B12 /* Pods_Notes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Notes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C455F3BBEE1BA8146EF2B7C2 /* Pods-Notes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notes.release.xcconfig"; path = "Target Support Files/Pods-Notes/Pods-Notes.release.xcconfig"; sourceTree = "<group>"; };
 		C79B80C42794568900DA9780 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,6 +110,8 @@
 			isa = PBXGroup;
 			children = (
 				6EDC389F2797DC0B000BC3D9 /* Constant.swift */,
+				6EDC38A9279906D6000BC3D9 /* ActionSheetType.swift */,
+				6EDC38AB27991CAE000BC3D9 /* AlertType.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -295,6 +301,7 @@
 				C79B80CA2794568900DA9780 /* SceneDelegate.swift in Sources */,
 				C79B80D22794568900DA9780 /* Notes.xcdatamodeld in Sources */,
 				6EDC389D2797DBCC000BC3D9 /* NoteDetailViewModel.swift in Sources */,
+				6EDC38AC27991CAE000BC3D9 /* AlertType.swift in Sources */,
 				6EDC38A627980B52000BC3D9 /* Note.swift in Sources */,
 				6EDC38932797DAC6000BC3D9 /* NoteRepositoryImpl.swift in Sources */,
 				6EDC38912797DAA5000BC3D9 /* NoteRepository.swift in Sources */,
@@ -302,6 +309,7 @@
 				6EDC38A02797DC0B000BC3D9 /* Constant.swift in Sources */,
 				C79B80E327945C3400DA9780 /* NoteTableViewCell.swift in Sources */,
 				6EDC389B2797DBAD000BC3D9 /* NoteListViewModel.swift in Sources */,
+				6EDC38AA279906D6000BC3D9 /* ActionSheetType.swift in Sources */,
 				6EDC38A8279825C1000BC3D9 /* NoteRepositoryInjection.swift in Sources */,
 				6EDC38A42797EFE2000BC3D9 /* NoteSplitViewController.swift in Sources */,
 				C79B80DF279458CA00DA9780 /* NotesTableViewController.swift in Sources */,

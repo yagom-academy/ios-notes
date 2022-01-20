@@ -92,6 +92,7 @@ struct NoteRepositoryImpl: NoteRepository {
                 // update
                 let noteEntity = noteEntityList[0] as NSManagedObject
                 noteEntity.setValue(note.contents, forKey: "contents")
+
                 self.saveNotes(completion: completion)
             } catch {
                 fatalError("(\(#function) is error")
@@ -105,13 +106,13 @@ struct NoteRepositoryImpl: NoteRepository {
         DispatchQueue.global().async {
             do {
                 let noteEntities = try context.fetch(request)
-                let noteEntityList: [NoteEntity] = noteEntities
+                noteEntities
                     .filter { noteEntity in
                         noteEntity.id?.uuidString == note.id
                     }
-
-                let noteEntity = noteEntityList[0]
-                context.delete(noteEntity)
+                    .map {
+                        context.delete($0)
+                    }
 
                 self.saveNotes(completion: completion)
             } catch {
