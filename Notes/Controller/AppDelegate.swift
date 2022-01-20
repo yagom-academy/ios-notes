@@ -40,7 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let container = NSPersistentContainer(name: "Notes")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                print(storeDescription.url)
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
