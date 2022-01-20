@@ -10,3 +10,10 @@ final class NoteViewController: UIViewController {
 
     @IBOutlet private weak var noteTextView: UITextView!
 }
+
+extension NoteViewController: NoteSelectionDelegate {
+    func noteSelected(_ note: JsonNote) {
+        noteTextView.text = note.content
+    }
+}
+
