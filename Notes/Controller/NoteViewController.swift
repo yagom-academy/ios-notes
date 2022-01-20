@@ -21,6 +21,16 @@ final class NoteViewController: UIViewController {
         self.note = data
     }
     
+    func showDeleteAlert() {
+        let alertController = UIAlertController(title: "진짜요?", message: "정말로 삭제하시겠어요?", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let delete = UIAlertAction(title: "삭제", style: .destructive, handler: { _ in self.deleteNote() })
+        
+        alertController.addAction(cancel)
+        alertController.addAction(delete)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func deleteNote() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = appDelegate.persistentContainer.viewContext
@@ -43,9 +53,8 @@ final class NoteViewController: UIViewController {
     @IBAction func showAdditionalAction(_ sender: Any) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 //        let handler = { (action: UIAlertAction) in print(action.title) }
-//        let deleteAlert = UIAlertAction(title: "진짜요?", style: .destructive, handler: nil)
         let share = UIAlertAction(title: "share..", style: .default, handler: { _ in self.showActivityView()})
-        let delete = UIAlertAction(title: "delete", style: .destructive, handler: { _ in self.deleteNote() })
+        let delete = UIAlertAction(title: "delete", style: .destructive, handler: { _ in self.showDeleteAlert() })
         let cancel = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
         
         alertController.addAction(share)
