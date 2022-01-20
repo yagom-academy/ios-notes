@@ -10,7 +10,11 @@ import Foundation
 struct NoteItem: Codable {
     let title: String
     let body: String
-    let lastModified: Int
+    let lastModified: Double
+    
+    var lastModifiedDate: Date {
+        Date(timeIntervalSince1970: lastModified)
+    }
     
     enum CodingKeys: String, CodingKey {
         case title = "title"
