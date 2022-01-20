@@ -29,7 +29,7 @@
             <objects>
                 <viewController storyboardIdentifier="NoteVC" id="7Zy-wL-KH2" customClass="NoteViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="C1c-2m-ZpA">
-                        <rect key="frame" x="0.0" y="0.0" width="575.5" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="575" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="si1-vC-9zx">
@@ -61,9 +61,14 @@ When, while the lovely valley teems with vapour around me, and the meridian sun 
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Swc-mU-17t">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="ellipsis.circle" catalog="system" id="iEG-qn-xw6"/>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="ellipsis.circle" catalog="system" id="iEG-qn-xw6">
+                            <connections>
+                                <action selector="showAdditionalAction:" destination="7Zy-wL-KH2" id="y0n-kf-Pd8"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="additional" destination="iEG-qn-xw6" id="QV4-Lw-x9U"/>
                         <outlet property="noteTextView" destination="si1-vC-9zx" id="E0Z-CE-L2I"/>
                     </connections>
                 </viewController>
