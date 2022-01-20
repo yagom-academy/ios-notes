@@ -85,14 +85,18 @@ final class NoteViewController: UIViewController {
         note.contents = contents
         note.entireContents = entireContents
         note.date = Date()
-        self.noteDetailViewModel.addOrUpdateNote(note: note) {
+        self.noteDetailViewModel.addOrUpdateNote(note: note) { [weak self] in
+            guard let self = self else { return }
+
             self.noteTableViewController?.noteListViewModel.notes()
         }
     }
 
     private func deleteNote() {
         guard let note = self.note else { return }
-        self.noteDetailViewModel.deleteNote(note: note) {
+        self.noteDetailViewModel.deleteNote(note: note) { [weak self] in
+            guard let self = self else { return }
+            
             self.noteTableViewController?.noteListViewModel.notes()
             DispatchQueue.main.async {
                 self.willAddOrUpdateNote = false

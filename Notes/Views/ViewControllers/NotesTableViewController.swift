@@ -11,6 +11,7 @@ final class NotesTableViewController: UITableViewController {
     @IBOutlet var noteTableView: UITableView!
     
     var noteListViewModel = NoteListViewModel()
+    var noteDetailViewModel = NoteDetailViewModel()
     private var noteList: [Note]?
     private var selectedNote: Note?
     
@@ -19,6 +20,11 @@ final class NotesTableViewController: UITableViewController {
 
         self.setViewModel()
         self.noteListViewModel.notes()
+    }
+
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        self.selectedNote = nil
+        self.performSegue(withIdentifier: Constant.noteDetailSegue, sender: self)
     }
 
     private func setViewModel() {
@@ -30,9 +36,15 @@ final class NotesTableViewController: UITableViewController {
         }
     }
 
-    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-        self.selectedNote = nil
-        self.performSegue(withIdentifier: Constant.noteDetailSegue, sender: self)
+    private func deleteNote(note: Note, indexPath: IndexPath) {
+        self.noteDetailViewModel.deleteNote(note: note) { [weak self] in
+            guard let self = self else { return }
+
+            DispatchQueue.main.async {
+                self.noteList?.remove(at: indexPath.row)
+                self.noteTableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -76,5 +88,20 @@ extension NotesTableViewController {
         cell.dateLabel.text = dateFormatter.string(from: noteList[indexPath.row].date)
 
         return cell
+    }
+
+    override func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
+        if editingStyle == .delete {
+            guard let noteList = self.noteList else {
+                return
+            }
+
+            let note = noteList[indexPath.row]
+            self.deleteNote(note: note, indexPath: indexPath)
+        }
     }
 }
