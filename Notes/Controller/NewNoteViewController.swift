@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class NewNoteViewController: UIViewController {
     private let closeButton: UIButton = {
@@ -13,12 +14,8 @@ class NewNoteViewController: UIViewController {
         button.setTitle("close", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-        
         button.addTarget(self, action: #selector(touchUpCloseButton), for: .touchUpInside)
-        
         button.translatesAutoresizingMaskIntoConstraints = false
-        
-        
         return button
     }()
     
@@ -27,12 +24,8 @@ class NewNoteViewController: UIViewController {
         button.setTitle("save", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-        
         button.addTarget(self, action: #selector(touchUpSaveButton), for: .touchUpInside)
-        
         button.translatesAutoresizingMaskIntoConstraints = false
-        
-        
         return button
     }()
     
@@ -45,14 +38,20 @@ class NewNoteViewController: UIViewController {
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .systemBackground
         view.addSubview(closeButton)
         view.addSubview(noteTextView)
         view.addSubview(saveButton)
         
+        setObjectsContraints()
+    }
+    
+    func setObjectsContraints() {
         closeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
         closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         
@@ -71,7 +70,23 @@ class NewNoteViewController: UIViewController {
     }
 
     @objc func touchUpSaveButton(_ sender: Any) {
-        print("save")
+        guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return }
+        let context = container.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "UserNotes", in: context)
+        guard let entity = entity else { return }
+
+        let noteEntity = UserNotes(entity: entity, insertInto: context)
+        noteEntity.setValue(UUID(), forKey: "id")
+        noteEntity.setValue("  ", forKey: "noteBody")
+        noteEntity.setValue("  ", forKey: "lastModifiedDate")
+        
+        do {
+            try context.save()
+            print("save")
+        } catch {
+            print("fail")
+        }
         dismiss(animated: true, completion: nil)
+        
     }
 }
