@@ -55,7 +55,6 @@ class MainSplitViewController: UISplitViewController {
 }
 
 extension MainSplitViewController: UITableViewDelegate, UITableViewDataSource {
-    // MARK: - Table view data source
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
