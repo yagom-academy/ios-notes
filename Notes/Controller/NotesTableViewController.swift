@@ -10,17 +10,15 @@ import CoreData
 final class NotesTableViewController: UITableViewController {
 
     @IBOutlet var noteListTable: UITableView!
-    private var notes: [UserNotes] = []
+    private var notes: [NoteForm] = []
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        if let decodedData = decodeJSONData(type: [NoteForm].self, from: "sample") {
-//            self.notes = decodedData
-//        }
-//        print(fetchNoteData().last?.title)
-//        print(fetchNoteData().last?.noteBody)
-        
+        if let decodedData = decodeJSONData(type: [NoteForm].self, from: "sample") {
+            self.notes = decodedData
+        }
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = true
 
@@ -28,10 +26,10 @@ final class NotesTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.notes = fetchNoteData()
-        noteListTable.reloadData()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        self.notes = fetchNoteData()
+//        noteListTable.reloadData()
+//    }
     
     func fetchNoteData() -> [UserNotes] {
         guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return [] }

@@ -14,6 +14,8 @@ final class NoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setData()
+        noteTextView.adjustsFontForContentSizeCategory = true
+        noteTextView.font = UIFont.preferredFont(forTextStyle: .body)
     }
     
     private func setData() {

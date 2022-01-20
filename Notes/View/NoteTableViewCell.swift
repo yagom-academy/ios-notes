@@ -35,17 +35,11 @@ final class NoteTableViewCell: UITableViewCell {
         shortDescriptionLabel.text = nil
     }
     
-    func setContents(with data: UserNotes) {
+    func setContents(with data: NoteForm) {
         titleLabel.text = data.title
         shortDescriptionLabel.text = data.noteBody
         
         guard let localeIdentifier = Locale.preferredLanguages.first else { return }
-//        print("-----------------")
-//        print(Locale.current.identifier)
-//        print(Locale.current.regionCode)
-//        print(Locale.current.languageCode)
-//        print(Locale.current)
-//        print(Locale.preferredLanguages.first)
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
