@@ -17,8 +17,29 @@ final class NoteViewController: UIViewController {
         noteTextView.text = note?.body
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+//        if note == nil {
+//            saveNote()
+//        }
+    }
+    
     func configureView(data: NoteEntity) {
         self.note = data
+    }
+    
+    func saveNote() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let context = appDelegate.persistentContainer.viewContext
+        let data = NoteEntity(context: context)
+        data.title = (noteTextView.text).components(separatedBy: CharacterSet.newlines).first
+        data.body = noteTextView.text
+        data.date = Date()
+        do {
+            try context.save()
+        } catch {
+            print("save error")
+        }
     }
     
     func showDeleteAlert() {
@@ -41,18 +62,15 @@ final class NoteViewController: UIViewController {
         } catch {
             print("delete fail")
         }
-        self.dismiss(animated: true, completion: nil)
     }
     
     func showActivityView() {
-        let activityViewController: UIActivityViewController = UIActivityViewController(activityItems: [note?.title, note?.body, note?.date], applicationActivities: nil)
-//        activityViewController.completionWithItemsHandler = { _ in print("activity view")}
+        let activityViewController: UIActivityViewController = UIActivityViewController(activityItems: [note?.title, note?.body], applicationActivities: nil)
         self.present(activityViewController, animated: true, completion: nil)
     }
     
     @IBAction func showAdditionalAction(_ sender: Any) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-//        let handler = { (action: UIAlertAction) in print(action.title) }
         let share = UIAlertAction(title: "share..", style: .default, handler: { _ in self.showActivityView()})
         let delete = UIAlertAction(title: "delete", style: .destructive, handler: { _ in self.showDeleteAlert() })
         let cancel = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
