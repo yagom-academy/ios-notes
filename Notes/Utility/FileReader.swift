@@ -8,10 +8,6 @@
 import Foundation
 
 class FileReader {
-    static let shared: FileReader = FileReader()
-    
-    private init() {}
-    
     func readFileAsData(fileName: String, extensionType: String) -> Data? {
         guard let fileUrl: URL = Bundle.main.url(forResource: fileName, withExtension: extensionType) else {
             assertionFailure()

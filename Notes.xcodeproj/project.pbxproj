@@ -76,13 +76,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0ED73BC62796A1D10058FAE4 /* Shared */ = {
+		0ED73BC62796A1D10058FAE4 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
 				0ED73BC72796A1DD0058FAE4 /* JSONParser.swift */,
 				0ED73BC92796A2AE0058FAE4 /* FileReader.swift */,
 			);
-			path = Shared;
+			path = Utility;
 			sourceTree = "<group>";
 		};
 		0ED73BD42796A5680058FAE4 /* NotesTests */ = {
@@ -115,7 +115,7 @@
 		C79B80C62794568900DA9780 /* Notes */ = {
 			isa = PBXGroup;
 			children = (
-				0ED73BC62796A1D10058FAE4 /* Shared */,
+				0ED73BC62796A1D10058FAE4 /* Utility */,
 				0ED73BC42796A19C0058FAE4 /* sample.json */,
 				C79B80E6279461FD00DA9780 /* Model */,
 				C79B80E5279461F800DA9780 /* View */,

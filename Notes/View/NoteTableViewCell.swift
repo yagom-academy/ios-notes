@@ -27,7 +27,7 @@ final class NoteTableViewCell: UITableViewCell {
         clearContents()
     }
     
-    func bindCellItem(item: NoteItem) {
+    func bind(item: NoteItem) {
         titleLabel.text = item.title
         dateLabel.text = "\(item.lastModified)"
         shortDescriptionLabel.text = item.body

@@ -30,7 +30,7 @@ final class NotesTableViewController: UITableViewController {
     
     // MARK: - Setup
     private func bindNoteItems() {
-        guard let jsonData: Data = FileReader.shared.readFileAsData(fileName: "sample", extensionType: "json"), let model = JSONParser.shared.decode([NoteItem].self, from: jsonData) else {
+        guard let jsonData: Data = FileReader().readFileAsData(fileName: "sample", extensionType: "json"), let model = JSONParser().decode([NoteItem].self, from: jsonData) else {
             return
         }
         
@@ -70,7 +70,7 @@ extension NotesTableViewController {
             fatalError("No NoteTableViewCell")
         }
 
-        cell.bindCellItem(item: noteItems[indexPath.row])
+        cell.bind(item: noteItems[indexPath.row])
         return cell
     }
 }
