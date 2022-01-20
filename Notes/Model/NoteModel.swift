@@ -10,7 +10,7 @@ import Foundation
 struct NoteModel: Codable {
     var title: String
     var body: String
-    var lastModified: Int
+    var lastModified: Double
     
     enum CodingKeys: String, CodingKey {
         case title, body

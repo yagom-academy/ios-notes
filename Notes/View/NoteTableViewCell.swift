@@ -7,15 +7,20 @@
 import UIKit
 
 final class NoteTableViewCell: UITableViewCell {
-    
     // MARK: - Properties
     // MARK: Reuse Identifier
-    static let reuseIdentifier = String(describing: NoteTableViewCell.self)
+    static let reuseIdentifier: String = String(describing: NoteTableViewCell.self)
     
     // MARK: IBOutlets
-    @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var dateLabel: UILabel!
-    @IBOutlet var shortDescriptionLabel: UILabel!
+    @IBOutlet private var titleLabel: UILabel?
+    @IBOutlet private var dateLabel: UILabel?
+    @IBOutlet private var shortDescriptionLabel: UILabel?
+    
+    let dateFormatter: DateFormatter = {
+        let dateFormatter: DateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy. MM. dd."
+        return dateFormatter
+    }()
     
     // MARK: - Methods
     override func awakeFromNib() {
@@ -30,8 +35,14 @@ final class NoteTableViewCell: UITableViewCell {
     
     // MARK: Privates
     private func clearContents() {
-        titleLabel.text = nil
-        dateLabel.text = nil
-        shortDescriptionLabel.text = nil
+        titleLabel?.text = nil
+        dateLabel?.text = nil
+        shortDescriptionLabel?.text = nil
     }
+    
+    func updateView(by noteModel: NoteEntity) {
+        titleLabel?.text = noteModel.title
+        dateLabel?.text = dateFormatter.string(from: noteModel.lastModifiedDate)
+        shortDescriptionLabel?.text = noteModel.body
+    } 
 }
