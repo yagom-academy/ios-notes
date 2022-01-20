@@ -105,13 +105,11 @@ final class NoteViewController: UIViewController {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
         let share = UIAlertAction(title: ActionSheetType.shareNote.description, style: .default, handler: {_ in
-
+            self.callActivityViewController(entireContents: self.noteTextView.text)
         })
-
         let delete = UIAlertAction(title: ActionSheetType.deleteNote.description, style: .destructive, handler: {_ in
             self.showAlert(title: Constant.alertTitle, message: Constant.alertMessage)
         })
-
         let cancel = UIAlertAction(title: ActionSheetType.cancel.description, style: .cancel, handler: nil)
 
         actionSheet.addAction(share)
@@ -133,5 +131,13 @@ final class NoteViewController: UIViewController {
         alert.addAction(delete)
 
         self.present(alert, animated: true, completion: nil)
+    }
+
+    private func callActivityViewController(entireContents: String) {
+        let activityViewController = UIActivityViewController(
+            activityItems: [entireContents],
+            applicationActivities: nil
+        )
+        self.present(activityViewController, animated: true, completion: nil)
     }
 }
