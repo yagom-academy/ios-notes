@@ -10,7 +10,9 @@ final class NotesTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.delegate = splitViewController as? UITableViewDelegate
-        self.tableView.dataSource = splitViewController as? UITableViewDataSource
+        let mainViewController = splitViewController as? MainSplitViewController
+        self.tableView.delegate = mainViewController
+        self.tableView.dataSource = mainViewController
+        mainViewController?.noteTableViewController = self
     }
 }

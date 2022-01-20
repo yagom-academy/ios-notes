@@ -20,12 +20,18 @@ final class NoteTableViewCell: UITableViewCell {
     // MARK: - Methods
     override func awakeFromNib() {
         super.awakeFromNib()
-//        clearContents()
+        clearContents()
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-//        clearContents()
+        clearContents()
+    }
+
+    func configureContent(_ note: Note) {
+        titleLabel.text = note.title
+        dateLabel.text = DateFormatter.localizedString(from: note.lastModified, dateStyle: .long, timeStyle: .none)
+        shortDescriptionLabel.text = note.content
     }
 
     // MARK: Privates

@@ -10,13 +10,16 @@ import UIKit
 class MainSplitViewController: UISplitViewController {
 
     // TODO: 데이터 코어데이터로 대체
-    lazy var notes: [Note] = {
+    var notes: [Note] = {
         var arr = [Note]()
         for num in 0..<10 {
             arr.append(Note(title: "Dummy\(num)", lastModified: Date(), content: "dummy\(num)"))
         }
         return arr
     }()
+
+    weak var noteViewController: NoteViewController?
+    var noteTableViewController: NotesTableViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,13 +32,25 @@ class MainSplitViewController: UISplitViewController {
     func showNote(position: Int) {
         guard let noteNavigationViewController = storyboard?
                 .instantiateViewController(withIdentifier: "NoteNVC") as? UINavigationController,
-              let noteViewController = noteNavigationViewController.topViewController as? NoteViewController else {
+              let newNoteViewController = noteNavigationViewController.topViewController as? NoteViewController else {
                   fatalError("StoryboardID mismatch or failed type casting")
         }
 
         let selectedNote = notes[position]
-        noteViewController.note = selectedNote
+        newNoteViewController.note = selectedNote
+        newNoteViewController.notePosition = position
         showDetailViewController(noteNavigationViewController, sender: nil)
+        self.noteViewController = newNoteViewController
+    }
+
+    func updateNote(at position: Int, with newNote: Note) {
+        let oldNote: Note = notes[position]
+        guard oldNote.id == newNote.id else {
+            fatalError("ID missmatch on note modification")
+        }
+        notes[position] = newNote
+        let cellIndexPath = IndexPath(row: position, section: 0)
+        noteTableViewController?.tableView.reloadRows(at: [cellIndexPath], with: .none)
     }
 }
 
@@ -55,51 +70,11 @@ extension MainSplitViewController: UITableViewDelegate, UITableViewDataSource {
             fatalError()
         }
         let note = notes[indexPath.row]
-        cell.titleLabel.text = note.title
-        cell.dateLabel.text = DateFormatter.localizedString(from: note.lastModified,
-                                                            dateStyle: .long, timeStyle: .none)
-        cell.shortDescriptionLabel.text = note.content
-
+        cell.configureContent(note)
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         showNote(position: indexPath.row)
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
 }
