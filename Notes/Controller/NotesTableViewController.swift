@@ -36,9 +36,9 @@ final class NotesTableViewController: UITableViewController {
         if UITraitCollection.current.horizontalSizeClass == .compact {
             navigationController?.pushViewController(noteView, animated: true)
         } else {
-            guard let secondeNavigationController: UINavigationController = splitViewController?.viewControllers[1] as? UINavigationController else { return }
-            secondeNavigationController.popViewController(animated: false)
-            secondeNavigationController.pushViewController(noteView, animated: true)
+            guard let secondNavigationController: UINavigationController = splitViewController?.viewControllers[1] as? UINavigationController else { return }
+            secondNavigationController.popViewController(animated: false)
+            secondNavigationController.pushViewController(noteView, animated: true)
         }
     }
     
@@ -78,9 +78,9 @@ final class NotesTableViewController: UITableViewController {
             navigationController?.pushViewController(noteView, animated: true)
             tableView.deselectRow(at: indexPath, animated: true)
         } else {
-            guard let secondeNavigationController: UINavigationController = splitViewController?.viewControllers[1] as? UINavigationController else { return }
-            secondeNavigationController.popViewController(animated: false)
-            secondeNavigationController.pushViewController(noteView, animated: true)
+            guard let secondNavigationController: UINavigationController = splitViewController?.viewControllers[1] as? UINavigationController else { return }
+            secondNavigationController.popViewController(animated: false)
+            secondNavigationController.pushViewController(noteView, animated: true)
         }
     }
     
