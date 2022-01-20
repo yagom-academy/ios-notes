@@ -39,7 +39,6 @@ class NewNoteViewController: UIViewController {
         return textView
     }()
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -83,12 +82,11 @@ class NewNoteViewController: UIViewController {
         if stringComponents.count > 0 {
             noteEntity.setValue(stringComponents[0], forKey: "title")
             stringComponents.remove(at: 0)
-            noteEntity.setValue(stringComponents.joined(separator:"\n"), forKey: "noteBody")
+            noteEntity.setValue(stringComponents.joined(separator: "\n"), forKey: "noteBody")
         } else {
             noteEntity.setValue("", forKey: "title")
             noteEntity.setValue("", forKey: "noteBody")
         }
-        
         
         let time = Double(Date().timeIntervalSince1970)
         noteEntity.setValue(time, forKey: "lastModifiedDate")

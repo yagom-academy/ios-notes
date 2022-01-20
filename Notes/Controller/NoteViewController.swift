@@ -18,6 +18,11 @@ final class NoteViewController: UIViewController {
         noteTextView.font = UIFont.preferredFont(forTextStyle: .body)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        noteTextView.setContentOffset(CGPoint.zero, animated: false)
+    }
+    
     private func setData() {
         noteTextView.text = data
     }

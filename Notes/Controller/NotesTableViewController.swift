@@ -12,7 +12,6 @@ final class NotesTableViewController: UITableViewController {
     @IBOutlet var noteListTable: UITableView!
     private var notes: [NoteForm] = []
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         if let decodedData = decodeJSONData(type: [NoteForm].self, from: "sample") {
@@ -42,7 +41,6 @@ final class NotesTableViewController: UITableViewController {
             return []
         }
     }
-    
     
     @IBAction func touchUpAddButton(_ sender: Any) {
         let newNoteView = NewNoteViewController()

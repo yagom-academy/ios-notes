@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension UserNotes {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<UserNotes> {

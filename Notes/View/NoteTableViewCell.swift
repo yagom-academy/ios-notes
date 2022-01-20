@@ -20,19 +20,10 @@ final class NoteTableViewCell: UITableViewCell {
     // MARK: - Methods
     override func awakeFromNib() {
         super.awakeFromNib()
-//        clearContents()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-//        clearContents()
-    }
-    
-    // MARK: Privates
-    private func clearContents() {
-        titleLabel.text = nil
-        dateLabel.text = nil
-        shortDescriptionLabel.text = nil
     }
     
     func setContents(with data: NoteForm) {
