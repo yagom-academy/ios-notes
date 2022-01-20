@@ -35,7 +35,11 @@ final class NoteViewController: UIViewController {
         if noteTextView == nil {
             return 
         }
-        noteTextView?.text = noteEntity?.body
+        guard let noteEntity = noteEntity else {
+            noteTextView?.text = ""
+            return
+        }
+        noteTextView?.text = (noteEntity.title ?? "") + "\n" + (noteEntity.body ?? "")
     }
     
     func checkHoldView() {
@@ -44,8 +48,13 @@ final class NoteViewController: UIViewController {
     }
     
     func saveEntity(by textView: UITextView) {
-        noteEntity?.title = textView.text
-        noteEntity?.body = textView.text
+        var separatedText: [String] = textView.text.components(separatedBy: "\n").map { String($0) }
+        noteEntity?.title = separatedText.isEmpty ? nil : separatedText[0]
+        if separatedText.isEmpty == false {
+            separatedText.removeFirst()
+        }
+        
+        noteEntity?.body = separatedText.joined(separator: "\n")
         noteEntity?.lastModified = Date().timeIntervalSince1970
         NoteCoreDataStorage.shared.saveContext()
     }

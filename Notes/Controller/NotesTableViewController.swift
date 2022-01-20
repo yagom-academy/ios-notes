@@ -186,7 +186,7 @@ extension NotesTableViewController {
     }
     
     func showActivityView(note: NoteEntity) {
-        let activityViewController: UIActivityViewController = UIActivityViewController(activityItems: [note.body ?? ""], applicationActivities: nil)
+        let activityViewController: UIActivityViewController = UIActivityViewController(activityItems: [note.body ?? "", note.title ?? ""], applicationActivities: nil)
         self.present(activityViewController, animated: true, completion: nil)
     }
 }
