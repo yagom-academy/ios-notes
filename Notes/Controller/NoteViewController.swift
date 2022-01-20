@@ -34,12 +34,18 @@ final class NoteViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    func showActivityView() {
+        let activityViewController: UIActivityViewController = UIActivityViewController(activityItems: [note?.title, note?.body, note?.date], applicationActivities: nil)
+//        activityViewController.completionWithItemsHandler = { _ in print("activity view")}
+        self.present(activityViewController, animated: true, completion: nil)
+    }
+    
     @IBAction func showAdditionalAction(_ sender: Any) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 //        let handler = { (action: UIAlertAction) in print(action.title) }
 //        let deleteAlert = UIAlertAction(title: "진짜요?", style: .destructive, handler: nil)
-        let share = UIAlertAction(title: "share..", style: .default, handler: nil)
-        let delete = UIAlertAction(title: "delete", style: .destructive, handler: { (action: UIAlertAction) in self.deleteNote() })
+        let share = UIAlertAction(title: "share..", style: .default, handler: { _ in self.showActivityView()})
+        let delete = UIAlertAction(title: "delete", style: .destructive, handler: { _ in self.deleteNote() })
         let cancel = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
         
         alertController.addAction(share)
