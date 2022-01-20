@@ -13,12 +13,12 @@ final class NoteViewController: UIViewController {
     private var noteDetailViewModel = NoteDetailViewModel()
     var noteTableViewController: NotesTableViewController?
     var note: Note?
-    private var willAddOrUpdate = true
+    private var willAddOrUpdateNote = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        willAddOrUpdate = true
+        self.willAddOrUpdateNote = true
         self.setViewModel()
         self.noteDetailViewModel.note(id: note?.id)
         self.setViews()
@@ -31,7 +31,7 @@ final class NoteViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        if self.willAddOrUpdate {
+        if self.willAddOrUpdateNote {
             self.addOrUpdateNote()
         }
     }
@@ -52,25 +52,39 @@ final class NoteViewController: UIViewController {
                 return
             }
 
-            self.noteTextView.text = note.contents
+            self.noteTextView.text = note.entireContents
         }
     }
 
     private func addOrUpdateNote() {
-        guard self.noteTextView.text != "" else { return }
+        guard let entireContents = self.noteTextView.text else { return }
+
+        var splitText = self.noteTextView.text
+            .split(separator: "\n")
+            .map {
+                String($0)
+            }
+
+        let title = splitText[0]
+        splitText.removeFirst()
+        let contents = splitText.joined(separator: "\n")
 
         if self.note == nil {
             note = Note(
                 id: UUID().uuidString,
-                title: "temp title",
-                contents: noteTextView.text,
-                date: "temp date"
+                title: title,
+                contents: contents,
+                entireContents: entireContents,
+                date: Date()
             )
         }
 
         guard var note = self.note else { return }
 
-        note.contents = self.noteTextView.text
+        note.title = title
+        note.contents = contents
+        note.entireContents = entireContents
+        note.date = Date()
         self.noteDetailViewModel.addOrUpdateNote(note: note) {
             self.noteTableViewController?.noteListViewModel.notes()
         }
@@ -81,7 +95,7 @@ final class NoteViewController: UIViewController {
         self.noteDetailViewModel.deleteNote(note: note) {
             self.noteTableViewController?.noteListViewModel.notes()
             DispatchQueue.main.async {
-                self.willAddOrUpdate = false
+                self.willAddOrUpdateNote = false
                 self.navigationController?.popViewController(animated: true)
             }
         }

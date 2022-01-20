@@ -3,10 +3,11 @@
     <entity name="NoteEntity" representedClassName="NoteEntity" syncable="YES" codeGenerationType="class">
         <attribute name="contents" optional="YES" attributeType="String"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="entireContents" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="NoteEntity" positionX="-54" positionY="-9" width="128" height="89"/>
+        <element name="NoteEntity" positionX="-54" positionY="-9" width="128" height="104"/>
     </elements>
 </model>

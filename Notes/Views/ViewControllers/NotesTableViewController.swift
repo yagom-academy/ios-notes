@@ -70,7 +70,10 @@ extension NotesTableViewController {
 
         cell.titleLabel.text = noteList[indexPath.row].title
         cell.shortDescriptionLabel.text = noteList[indexPath.row].contents
-        cell.dateLabel.text = noteList[indexPath.row].date
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy. MM. dd."
+        cell.dateLabel.text = dateFormatter.string(from: noteList[indexPath.row].date)
 
         return cell
     }

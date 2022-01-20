@@ -31,7 +31,8 @@ struct NoteRepositoryImpl: NoteRepository {
                         id: noteEntity.id?.uuidString ?? "",
                         title: noteEntity.title ?? "",
                         contents: noteEntity.contents ?? "",
-                        date: "temp"
+                        entireContents: noteEntity.entireContents ?? "",
+                        date: noteEntity.date ?? Date()
                     )
                 }
                 completion(noteList)
@@ -55,7 +56,8 @@ struct NoteRepositoryImpl: NoteRepository {
                             id: noteEntity.id?.uuidString ?? "",
                             title: noteEntity.title ?? "",
                             contents: noteEntity.contents ?? "",
-                            date: "temp"
+                            entireContents: noteEntity.entireContents ?? "",
+                            date: noteEntity.date ?? Date()
                         )
                     }
                 let note = noteList[0]
@@ -84,6 +86,8 @@ struct NoteRepositoryImpl: NoteRepository {
                     noteEntity.id = UUID(uuidString: note.id)
                     noteEntity.title = note.title
                     noteEntity.contents = note.contents
+                    noteEntity.entireContents = note.entireContents
+                    noteEntity.date = note.date
 
                     self.saveNotes(completion: completion)
                     return
@@ -91,7 +95,7 @@ struct NoteRepositoryImpl: NoteRepository {
 
                 // update
                 let noteEntity = noteEntityList[0] as NSManagedObject
-                noteEntity.setValue(note.contents, forKey: "contents")
+                noteEntity.setValue(note.entireContents, forKey: "entireContents")
 
                 self.saveNotes(completion: completion)
             } catch {
