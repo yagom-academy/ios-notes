@@ -5,22 +5,44 @@
 // 
 
 import UIKit
+import CoreData
 
 final class NotesTableViewController: UITableViewController {
 
-    private var notes: [NoteForm] = []
+    @IBOutlet var noteListTable: UITableView!
+    private var notes: [UserNotes] = []
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let decodedData = decodeJSONData(type: [NoteForm].self, from: "sample") {
-            self.notes = decodedData
-        }
+//        if let decodedData = decodeJSONData(type: [NoteForm].self, from: "sample") {
+//            self.notes = decodedData
+//        }
+//        print(fetchNoteData().last?.title)
+//        print(fetchNoteData().last?.noteBody)
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = true
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.notes = fetchNoteData()
+        noteListTable.reloadData()
+    }
+    
+    func fetchNoteData() -> [UserNotes] {
+        guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return [] }
+        let context = container.viewContext
+        
+        let fetchRequest = NSFetchRequest<UserNotes>(entityName: "UserNotes")
+        do {
+            return try context.fetch(fetchRequest)
+        } catch {
+            return []
+        }
     }
     
     
@@ -49,14 +71,9 @@ final class NotesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let noteViewController = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as? NoteViewController else { return }
-        noteViewController.data = notes[indexPath.row].body
+        noteViewController.data = notes[indexPath.row].noteBody
         splitViewController?.showDetailViewController(UINavigationController(rootViewController: noteViewController), sender: self)
     }
-    
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let noteView = NoteViewController(notes[indexPath.row].body)
-//        self.navigationController?.pushViewController(noteView, animated: true)
-//    }
     
     /*
     // Override to support conditional editing of the table view.

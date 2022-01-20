@@ -76,16 +76,28 @@ class NewNoteViewController: UIViewController {
         guard let entity = entity else { return }
 
         let noteEntity = UserNotes(entity: entity, insertInto: context)
+        
         noteEntity.setValue(UUID(), forKey: "id")
-        noteEntity.setValue(noteTextView.text, forKey: "noteBody")
+        
+        var stringComponents = noteTextView.text.split(separator: "\n")
+        if stringComponents.count > 0 {
+            noteEntity.setValue(stringComponents[0], forKey: "title")
+            stringComponents.remove(at: 0)
+            noteEntity.setValue(stringComponents.joined(separator:"\n"), forKey: "noteBody")
+        } else {
+            noteEntity.setValue("", forKey: "title")
+            noteEntity.setValue("", forKey: "noteBody")
+        }
+        
+        
         let time = Double(Date().timeIntervalSince1970)
         noteEntity.setValue(time, forKey: "lastModifiedDate")
         
         do {
             try context.save()
-            print("save")
+            print("note saved")
         } catch {
-            print("fail")
+            print("note save fail")
         }
         dismiss(animated: true, completion: nil)
         

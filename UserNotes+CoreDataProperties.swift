@@ -16,10 +16,10 @@ extension UserNotes {
         return NSFetchRequest<UserNotes>(entityName: "UserNotes")
     }
     
-    @NSManaged public var id: UUID?
-    @NSManaged public var noteBody: String?
+    @NSManaged public var id: UUID
+    @NSManaged public var title: String
+    @NSManaged public var noteBody: String
     @NSManaged public var lastModifiedDate: Double
-
 }
 
 extension UserNotes : Identifiable {
