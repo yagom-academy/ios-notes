@@ -17,10 +17,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
         
-        guard let splitViewController = window?.rootViewController as? UISplitViewController else {
-            return
-        }
-        
+        guard let splitViewController = window?.rootViewController as? UISplitViewController,
+              let notesTableViewNavigationController = splitViewController.viewControllers.first as? UINavigationController,
+              let notesTableViewController = notesTableViewNavigationController.viewControllers.first as? NotesTableViewController,
+              let noteViewNavigationController = splitViewController.viewControllers.last as? UINavigationController,
+              let noteViewController = noteViewNavigationController.viewControllers.first as? NoteViewController
+        else { fatalError("ViewControllers are not intiated") }
+        notesTableViewController.delegate = noteViewController
         splitViewController.delegate = self
     }
 

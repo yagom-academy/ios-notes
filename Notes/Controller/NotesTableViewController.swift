@@ -12,17 +12,16 @@ final class NotesTableViewController: UITableViewController {
     private var notes: [JsonNote] = []
     weak var delegate: NoteSelectionDelegate?
     
-    //var container: NSPersistentContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-    
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = true
-
+        self.clearsSelectionOnViewWillAppear = true
         self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         notes = JsonNote.fectchSampleDate()
-        
     }
 
     // MARK: - Table view data source
@@ -37,62 +36,20 @@ final class NotesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier,
                                                  for: indexPath) as! NoteTableViewCell
-        cell.configureCell(with: notes[indexPath.row])
+        cell.configureUI(with: notes[indexPath.row])
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectNote = notes[indexPath.row]
-        guard let splitViewController = splitViewController else { return }
-        if splitViewController.viewControllers.count > 1 {
-            guard let noteNavigationViewController = splitViewController.viewControllers[1] as? UINavigationController,
-                  let noteViewController = noteNavigationViewController.topViewController as? NoteViewController else { return }
-            noteViewController.selectedNote = selectNote
-            splitViewController.showDetailViewController(noteNavigationViewController, sender: nil)
-        } else {
-            guard let noteViewController = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as? NoteViewController else { return }
-            let noteNavigationController = UINavigationController(rootViewController: noteViewController)
+        if let noteViewController = delegate as? NoteViewController,
+           let noteViewNavigationController = noteViewController.navigationController {
             _ = noteViewController.view
-            noteViewController.selectedNote = selectNote
-            splitViewController.showDetailViewController(noteNavigationController, sender: nil)
+            delegate?.noteSelected(selectNote)
+            splitViewController?.showDetailViewController(noteViewNavigationController, sender: nil)
         }
-        
     }
     
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 }
 
 protocol NoteSelectionDelegate: AnyObject {

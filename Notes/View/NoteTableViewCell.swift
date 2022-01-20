@@ -28,9 +28,9 @@ final class NoteTableViewCell: UITableViewCell {
 //        clearContents()
     }
     
-    func configureCell(with note: JsonNote) {
+    func configureUI(with note: JsonNote) {
         titleLabel.text = note.title
-        dateLabel.text = DateFormatter.localizedString(from: note.date, dateStyle: .short, timeStyle: .none)
+        dateLabel.text = note.date.toLocalizedString("YYYY. MM. dd")
         shortDescriptionLabel.text = note.content
     }
     
