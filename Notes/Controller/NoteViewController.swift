@@ -9,4 +9,14 @@ import UIKit
 final class NoteViewController: UIViewController {
 
     @IBOutlet private weak var noteTextView: UITextView!
+    var data: String?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setData()
+    }
+    
+    private func setData() {
+        noteTextView.text = data
+    }
 }

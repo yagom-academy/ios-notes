@@ -41,6 +41,12 @@ final class NotesTableViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let noteViewController = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as? NoteViewController else { return }
+        noteViewController.data = notes[indexPath.row].body
+        splitViewController?.showDetailViewController(UINavigationController(rootViewController: noteViewController), sender: self)
+    }
+    
 //    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        let noteView = NoteViewController(notes[indexPath.row].body)
 //        self.navigationController?.pushViewController(noteView, animated: true)
