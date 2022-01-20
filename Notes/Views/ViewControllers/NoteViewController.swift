@@ -11,6 +11,7 @@ final class NoteViewController: UIViewController {
     @IBOutlet private weak var noteTextView: UITextView!
 
     private var noteDetailViewModel = NoteDetailViewModel()
+    var noteTableViewController: NotesTableViewController?
     var note: Note?
 
     override func viewDidLoad() {
@@ -19,6 +20,12 @@ final class NoteViewController: UIViewController {
         self.setViewModel()
         self.noteDetailViewModel.note(id: note?.id)
         self.setViews()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        self.addOrUpdateNote()
     }
 
     private func setViewModel() {
@@ -42,10 +49,21 @@ final class NoteViewController: UIViewController {
     }
 
     private func addOrUpdateNote() {
-        guard let note = self.note else { return }
+        if self.note == nil {
+            note = Note(
+                id: UUID().uuidString,
+                title: "temp title",
+                contents: noteTextView.text,
+                date: "temp date"
+            )
+        }
 
+        guard var note = self.note else { return }
+
+        note.contents = self.noteTextView.text
         self.noteDetailViewModel.addOrUpdateNote(note: note) {
-            self.navigationController?.popViewController(animated: true)
+            self.noteTableViewController?.noteListViewModel.notes()
+            print("ok")
         }
     }
 

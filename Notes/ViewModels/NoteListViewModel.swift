@@ -25,8 +25,6 @@ class NoteListViewModel {
             }
 
             self.noteList = noteList
-            let dummyNote = Note(id: "123", title: "title", contents: "contents", date: "date")
-            self.noteList?.append(dummyNote)
         }
     }
 }

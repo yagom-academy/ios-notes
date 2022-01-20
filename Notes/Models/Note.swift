@@ -7,7 +7,7 @@
 
 struct Note {
     let id: String
-    let title: String
-    let contents: String
-    let date: String
+    var title: String
+    var contents: String
+    var date: String
 }

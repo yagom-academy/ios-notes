@@ -48,7 +48,7 @@ struct NoteRepositoryImpl: NoteRepository {
                 let noteEntities = try context.fetch(request)
                 let noteList: [Note] = noteEntities
                     .filter { noteEntity in
-                        noteEntity.id?.uuidString == id
+                        return noteEntity.id?.uuidString == id
                     }
                     .map { noteEntity in
                         Note(
@@ -58,13 +58,7 @@ struct NoteRepositoryImpl: NoteRepository {
                             date: "temp"
                         )
                     }
-//                let note = noteList[0]
-                let note = Note(
-                    id: "idd",
-                    title: "tt",
-                    contents: "cc",
-                    date: "temp"
-                )
+                let note = noteList[0]
                 completion(note)
             } catch {
                 fatalError("(\(#function) is error")
@@ -91,17 +85,14 @@ struct NoteRepositoryImpl: NoteRepository {
                     noteEntity.title = note.title
                     noteEntity.contents = note.contents
 
-                    self.saveNotes()
-                    completion()
+                    self.saveNotes(completion: completion)
                     return
                 }
 
                 // update
-                let noteEntity = noteEntityList[0]
+                let noteEntity = noteEntityList[0] as NSManagedObject
                 noteEntity.setValue(note.contents, forKey: "contents")
-
-                self.saveNotes()
-                completion()
+                self.saveNotes(completion: completion)
             } catch {
                 fatalError("(\(#function) is error")
             }
@@ -122,19 +113,19 @@ struct NoteRepositoryImpl: NoteRepository {
                 let noteEntity = noteEntityList[0]
                 context.delete(noteEntity)
 
-                self.saveNotes()
-                completion()
+                self.saveNotes(completion: completion)
             } catch {
                 fatalError("(\(#function) is error")
             }
         }
     }
 
-    private func saveNotes() {
+    private func saveNotes(completion: @escaping () -> Void) {
         let context = persistentContainer.viewContext
 
         do {
             try context.save()
+            completion()
         } catch {
             fatalError("cannot save context")
         }
