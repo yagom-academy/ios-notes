@@ -53,27 +53,3 @@ class MainSplitViewController: UISplitViewController {
         noteTableViewController?.tableView.reloadRows(at: [cellIndexPath], with: .none)
     }
 }
-
-extension MainSplitViewController: UITableViewDelegate, UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return notes.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier,
-                                                       for: indexPath) as? NoteTableViewCell else {
-            fatalError()
-        }
-        let note = notes[indexPath.row]
-        cell.configureContent(note)
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showNote(position: indexPath.row)
-    }
-}

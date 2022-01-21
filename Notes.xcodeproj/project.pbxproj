@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		13CEC30D8DD26C2E349991D4 /* Pods_Notes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5611C97D5401EB68E7654FF /* Pods_Notes.framework */; };
+		C244EAD9279A9B5C0031389A /* DateFormatter+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C244EAD8279A9B5C0031389A /* DateFormatter+extension.swift */; };
 		C27E4F562798FC260098F43F /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27E4F552798FC260098F43F /* Note.swift */; };
 		C2C5EEE22797DFDD0040221F /* MainSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C5EEE12797DFDD0040221F /* MainSplitViewController.swift */; };
 		C79B80C82794568900DA9780 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B80C72794568900DA9780 /* AppDelegate.swift */; };
@@ -24,6 +25,7 @@
 /* Begin PBXFileReference section */
 		350FC7B0E025E2A1AF2E4D40 /* Pods-Notes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notes.release.xcconfig"; path = "Target Support Files/Pods-Notes/Pods-Notes.release.xcconfig"; sourceTree = "<group>"; };
 		3F7AF9774372A52D6EF92227 /* Pods-Notes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notes.debug.xcconfig"; path = "Target Support Files/Pods-Notes/Pods-Notes.debug.xcconfig"; sourceTree = "<group>"; };
+		C244EAD8279A9B5C0031389A /* DateFormatter+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+extension.swift"; sourceTree = "<group>"; };
 		C27E4F552798FC260098F43F /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		C2C5EEE12797DFDD0040221F /* MainSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSplitViewController.swift; sourceTree = "<group>"; };
 		C79B80C42794568900DA9780 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +71,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C244EAD7279A9B440031389A /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				C244EAD8279A9B5C0031389A /* DateFormatter+extension.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
 		C79B80BB2794568900DA9780 = {
 			isa = PBXGroup;
 			children = (
@@ -90,6 +100,7 @@
 		C79B80C62794568900DA9780 /* Notes */ = {
 			isa = PBXGroup;
 			children = (
+				C244EAD7279A9B440031389A /* Util */,
 				C79B80E6279461FD00DA9780 /* Model */,
 				C79B80E5279461F800DA9780 /* View */,
 				C79B80E4279461EA00DA9780 /* Controller */,
@@ -252,6 +263,7 @@
 				C2C5EEE22797DFDD0040221F /* MainSplitViewController.swift in Sources */,
 				C79B80E1279458D700DA9780 /* NoteViewController.swift in Sources */,
 				C79B80E327945C3400DA9780 /* NoteTableViewCell.swift in Sources */,
+				C244EAD9279A9B5C0031389A /* DateFormatter+extension.swift in Sources */,
 				C79B80DF279458CA00DA9780 /* NotesTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

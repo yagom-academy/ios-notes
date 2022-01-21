@@ -14,7 +14,6 @@ final class NoteTableViewCell: UITableViewCell {
     @IBOutlet var dateLabel: UILabel!
     @IBOutlet var shortDescriptionLabel: UILabel!
 
-
     override func awakeFromNib() {
         super.awakeFromNib()
         clearContents()
@@ -27,7 +26,7 @@ final class NoteTableViewCell: UITableViewCell {
 
     func configureContent(_ note: Note) {
         titleLabel.text = note.title
-        dateLabel.text = DateFormatter.localizedString(from: note.lastModified, dateStyle: .long, timeStyle: .none)
+        dateLabel.text = DateFormatter.sharedWithLocalizedTemplate.string(from: note.lastModified)
         shortDescriptionLabel.text = note.content
     }
 
