@@ -19,6 +19,7 @@ final class NoteViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print(self)
         setData()
     }
     

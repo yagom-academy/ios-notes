@@ -80,7 +80,10 @@ final class NotesTableViewController: UITableViewController {
         guard let noteViewController = secondNavigationController?.children.first as? NoteViewController else { return }
         
         noteViewController.data = notes[indexPath.row].noteBody
-        noteViewController.reload()
+        if UITraitCollection.current.horizontalSizeClass == .regular {
+            noteViewController.reload()
+        }
+        
         
         guard let secondNavigationController = secondNavigationController else {
             return
