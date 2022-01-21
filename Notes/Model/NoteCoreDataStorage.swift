@@ -15,8 +15,8 @@ class NoteCoreDataStorage {
     lazy var persistentContainer: NSPersistentContainer = {
         let container: NSPersistentContainer = NSPersistentContainer(name: "Notes")
         container.loadPersistentStores { description, error in
+            print(description.url!)
             if let error: Error = error {
-                print(description.url!)
                 fatalError("Unable to load persistent stores: \(error)")
             }
         }

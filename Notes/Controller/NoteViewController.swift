@@ -13,7 +13,11 @@ protocol NoteViewControllerObserver: NSObject {
 
 final class NoteViewController: UIViewController {
     @IBOutlet private weak var noteTextView: UITextView?
-    private var noteEntity: NoteEntity?
+    private var noteEntity: NoteEntity? {
+        didSet {
+            checkIsEmpty(oldValue)
+        }
+    }
     weak var delegate: NoteViewControllerObserver?
     
     // MARK: - Life Cycle
@@ -26,6 +30,23 @@ final class NoteViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateView()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        checkIsEmpty(noteEntity)
+    }
+    
+    private func checkIsEmpty(_ noteEntity: NoteEntity?) {
+        guard let noteEntity = noteEntity else {
+            return
+        }
+
+        if (noteEntity.title == nil || noteEntity.title?.isEmpty == true) &&
+            (noteEntity.body == nil || noteEntity.body?.isEmpty == true) {
+            NoteCoreDataStorage.shared.delete(noteEntity)
+            delegate?.noteViewControllerDidChange()
+        }
     }
     
     func configure(note: NoteEntity?) {
