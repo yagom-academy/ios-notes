@@ -5,39 +5,92 @@
 // 
 
 import UIKit
+import CoreData
 
 final class NotesTableViewController: UITableViewController {
 
-    // private var notes: [Note] = []
+    @IBOutlet var noteListTable: UITableView!
+    private var notes: [NoteForm] = []
+    var firstNavigationController: UINavigationController?
+    var secondNavigationController: UINavigationController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let decodedData = decodeJSONData(type: [NoteForm].self, from: "sample") {
+            self.notes = decodedData
+        }
+        
+        guard let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else { return }
+        firstNavigationController = sceneDelegate.firstNavigationController
+        secondNavigationController = sceneDelegate.secondNavigationController
+        
+        
+//        print(splitViewController?.children)
+//        print(splitViewController?.viewControllers)
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = true
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
     }
-
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        self.notes = fetchNoteData()
+//        noteListTable.reloadData()
+//    }
+    
+    func fetchNoteData() -> [UserNotes] {
+        guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return [] }
+        let context = container.viewContext
+        
+        let fetchRequest = NSFetchRequest<UserNotes>(entityName: "UserNotes")
+        do {
+            return try context.fetch(fetchRequest)
+        } catch {
+            return []
+        }
+    }
+    
+    @IBAction func touchUpAddButton(_ sender: Any) {
+        let newNoteView = NewNoteViewController()
+        newNoteView.modalPresentationStyle = .fullScreen
+        self.present(newNoteView, animated: true, completion: nil)
+    }
+    
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 100
-        // return notes.count
+        return notes.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier,
-                                                 for: indexPath) as! NoteTableViewCell
-
-        // Configure the cell...
+                                                 for: indexPath) as? NoteTableViewCell ?? NoteTableViewCell()
+        cell.setContents(with: notes[indexPath.row])
 
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        guard let noteViewController = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as? NoteViewController else { return }
+        guard let noteViewController = secondNavigationController?.children.first as? NoteViewController else { return }
+        
+        noteViewController.data = notes[indexPath.row].noteBody
+        if UITraitCollection.current.horizontalSizeClass == .regular {
+            noteViewController.reload()
+        }
+        
+        
+        guard let secondNavigationController = secondNavigationController else {
+            return
+        }
+
+        splitViewController?.showDetailViewController(secondNavigationController,sender: self)
+        noteListTable.deselectRow(at: indexPath, animated: true)
     }
     
     /*

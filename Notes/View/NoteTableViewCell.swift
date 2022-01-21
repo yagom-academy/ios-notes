@@ -20,18 +20,26 @@ final class NoteTableViewCell: UITableViewCell {
     // MARK: - Methods
     override func awakeFromNib() {
         super.awakeFromNib()
-//        clearContents()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-//        clearContents()
     }
     
-    // MARK: Privates
-    private func clearContents() {
-        titleLabel.text = nil
-        dateLabel.text = nil
-        shortDescriptionLabel.text = nil
+    func setContents(with data: NoteForm) {
+        titleLabel.text = data.title
+        shortDescriptionLabel.text = data.noteBody
+        
+        guard let localeIdentifier = Locale.preferredLanguages.first else { return }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        dateFormatter.locale = Locale(identifier: localeIdentifier)
+        
+        let date = Date(timeIntervalSince1970: data.lastModifiedDate)
+        let stringDate = dateFormatter.string(from: date)
+        
+        dateLabel.text = stringDate
     }
 }
