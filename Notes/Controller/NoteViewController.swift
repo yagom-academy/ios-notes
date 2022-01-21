@@ -62,6 +62,7 @@ final class NoteViewController: UIViewController {
         } catch {
             print("delete fail")
         }
+        navigationController?.popViewController(animated: true)
     }
     
     func showActivityView() {
