@@ -50,7 +50,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Swc-mU-17t">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="ellipsis.circle" catalog="system" id="iEG-qn-xw6"/>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="ellipsis.circle" catalog="system" id="iEG-qn-xw6">
+                            <connections>
+                                <action selector="moreButtonClicked:" destination="7Zy-wL-KH2" id="Sta-Fj-WDp"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="noteTextView" destination="si1-vC-9zx" id="E0Z-CE-L2I"/>

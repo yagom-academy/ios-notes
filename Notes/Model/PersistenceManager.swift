@@ -34,26 +34,6 @@ class PersistenceManager {
             return []
         }
     }
-    
-//    @discardableResult
-//    func updateNote(_ note: Note) -> Bool {
-//        let fetchRequest = NSFetchRequest<Not>(entityName: "Note")
-//        fetchRequest.predicate = NSPredicate(format: "id = %@", note.id as CVarArg)
-//        do {
-//            let fetchResult = try context.fetch(fetchRequest)
-//            guard let managedObject = fetchResult.first else { return false }
-//            managedObject.setValue(note.title, forKey: "title")
-//            managedObject.setValue(note.content, forKey: "content")
-//            managedObject.setValue(note.date, forKey: "date")
-//
-//            try context.save()
-//        } catch {
-//            print(error.localizedDescription)
-//            return false
-//        }
-//
-//        return true
-//    }
 
     @discardableResult
     func saveContext() -> Bool {

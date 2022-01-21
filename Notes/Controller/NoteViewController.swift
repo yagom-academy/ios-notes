@@ -8,6 +8,8 @@ import UIKit
 
 protocol NoteEdittedDelegate: AnyObject {
     func notifyNoteEditted()
+    func share(_ note: Note)
+    func delete(_ note: Note)
 }
 
 final class NoteViewController: UIViewController {
@@ -19,6 +21,26 @@ final class NoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         noteTextView.delegate = self
+    }
+    @IBAction func moreButtonClicked(_ sender: Any) {
+        guard let note = note else { return }
+        let actionSheetAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let shareAction = UIAlertAction(title: "Share", style: .default) { _ in
+            self.delegate?.share(note)
+        }
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            self.delegate?.delete(note)
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        actionSheetAlertController.addAction(shareAction)
+        actionSheetAlertController.addAction(deleteAction)
+        actionSheetAlertController.addAction(cancel)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad,
+           let popoverController = actionSheetAlertController.popoverPresentationController{
+            popoverController.barButtonItem = sender as? UIBarButtonItem
+        }
+        present(actionSheetAlertController, animated: true,completion: nil)
     }
 }
 
