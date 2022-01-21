@@ -8,12 +8,12 @@
 import Foundation
 import UIKit
 
-class FileLoader {
+struct FileLoader {
     static let shared: FileLoader = FileLoader()
     
     private init() {}
     
-    func readDataSet(fileName: String) -> Data? {
+    static func readDataSet(fileName: String) -> Data? {
         guard let asset: NSDataAsset = NSDataAsset(name: fileName) else {
             assertionFailure()
             return nil

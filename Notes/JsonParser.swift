@@ -7,12 +7,12 @@
 
 import Foundation
 
-class JSONParser {
+struct JSONParser {
     static let shared: JSONParser = JSONParser()
     
     private init() {}
     
-    func decode<T: Codable>(_ modelType: T.Type, from data: Data) -> T? {
+    static func decode<T: Codable>(_ modelType: T.Type, from data: Data) -> T? {
         do {
             return try JSONDecoder().decode(modelType, from: data)
         } catch {

@@ -17,7 +17,6 @@ final class NotesTableViewController: UITableViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchTest()
         fetchNote()
         
         if splitViewController?.isCollapsed == false, !notes.isEmpty {
@@ -26,19 +25,6 @@ final class NotesTableViewController: UITableViewController {
     }
     
     // MARK: - fetch
-    func fetchTest() {
-        guard let jsonData: Data = FileLoader.shared.readDataSet(fileName: "sample") else {
-            return
-        }
-        
-        guard let model: [NoteModel] = JSONParser.shared.decode([NoteModel].self, from: jsonData) else {
-            return
-        }
-        model.forEach {
-            print($0.lastModified)
-        }
-    }
-    
     func fetchNote() {
         notes = noteCoreData.fetch()
         tableView.reloadData()
@@ -56,7 +42,7 @@ final class NotesTableViewController: UITableViewController {
               let noteViewController = noteViewController else {
                   return
               }
-        noteViewController.noteEntity = noteEntity
+        noteViewController.configure(note: noteEntity)
         
         if splitViewController?.isCollapsed == true {
             if noteEntity == nil {
@@ -83,7 +69,7 @@ final class NotesTableViewController: UITableViewController {
         if splitViewController?.isCollapsed == false {
             showNoteViewController(note: notes[nextShowIndex])
         } else {
-            noteViewController?.noteEntity = notes[nextShowIndex]
+            noteViewController?.configure(note: notes[nextShowIndex])
             navigationController?.popViewController(animated: true)
         }
     }

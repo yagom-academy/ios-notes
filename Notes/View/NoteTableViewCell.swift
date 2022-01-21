@@ -16,7 +16,7 @@ final class NoteTableViewCell: UITableViewCell {
     @IBOutlet private var dateLabel: UILabel?
     @IBOutlet private var shortDescriptionLabel: UILabel?
     
-    let dateFormatter: DateFormatter = {
+    private let dateFormatter: DateFormatter = {
         let dateFormatter: DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy. MM. dd."
         return dateFormatter
@@ -25,12 +25,12 @@ final class NoteTableViewCell: UITableViewCell {
     // MARK: - Methods
     override func awakeFromNib() {
         super.awakeFromNib()
-//        clearContents()
+        clearContents()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-//        clearContents()
+        clearContents()
     }
     
     // MARK: Privates
@@ -42,7 +42,7 @@ final class NoteTableViewCell: UITableViewCell {
     
     func updateView(by noteModel: NoteEntity) {
         titleLabel?.text = noteModel.title
-        dateLabel?.text = dateFormatter.string(from: noteModel.lastModifiedDate)
+        dateLabel?.text = dateFormatter.string(from: noteModel.lastModified.asDate)
         shortDescriptionLabel?.text = noteModel.body
     } 
 }
