@@ -1,8 +1,8 @@
 //
 //  Notes - SceneDelegate.swift
-//  Created by yagom. 
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
-// 
+//
 
 import UIKit
 
@@ -24,6 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
               let noteViewController = noteViewNavigationController.viewControllers.first as? NoteViewController
         else { fatalError("ViewControllers are not intiated") }
         notesTableViewController.delegate = noteViewController
+        noteViewController.delegate = notesTableViewController
         splitViewController.delegate = self
     }
 
@@ -55,7 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
 
         // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+//        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
 
 

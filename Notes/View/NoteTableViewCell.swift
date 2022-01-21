@@ -1,8 +1,8 @@
 //
 //  Notes - NoteTableViewCell.swift
-//  Created by yagom. 
+//  Created by yagom.
 //  Copyright © yagom. All rights reserved.
-// 
+//
 
 import UIKit
 
@@ -28,9 +28,9 @@ final class NoteTableViewCell: UITableViewCell {
 //        clearContents()
     }
     
-    func configureUI(with note: JsonNote) {
+    func configureUI(with note: Note) {
         titleLabel.text = note.title
-        dateLabel.text = note.date.toLocalizedString("YYYY. MM. dd")
+        dateLabel.text = note.date?.toLocalizedString("YYYY. MM. dd")
         shortDescriptionLabel.text = note.content
     }
     
