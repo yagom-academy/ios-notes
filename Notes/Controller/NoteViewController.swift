@@ -19,9 +19,14 @@ final class NoteViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-//        if note == nil {
-//            saveNote()
-//        }
+        if note == nil && !noteTextView.text.isEmpty {
+            saveNote()
+        }
+        if UITraitCollection.current.horizontalSizeClass == .regular {
+            guard let secondNavigationController: NotesTableViewController = splitViewController?.viewControllers[0] as? NotesTableViewController else { return }
+            secondNavigationController.loadCoreData()
+            secondNavigationController.viewWillAppear(true)
+        }
     }
     
     func configureView(data: NoteEntity) {
@@ -34,8 +39,10 @@ final class NoteViewController: UIViewController {
         let data = NoteEntity(context: context)
         data.title = (noteTextView.text).components(separatedBy: CharacterSet.newlines).first
         data.body = noteTextView.text
-        data.date = Date()
         do {
+            if let note = note {
+                deleteNote()
+            }
             try context.save()
         } catch {
             print("save error")
@@ -62,7 +69,12 @@ final class NoteViewController: UIViewController {
         } catch {
             print("delete fail")
         }
+        
         navigationController?.popViewController(animated: true)
+        if UITraitCollection.current.horizontalSizeClass == .regular {
+            guard let secondNavigationController: UINavigationController = splitViewController?.viewControllers[0] as? UINavigationController else { return }
+            secondNavigationController.viewWillAppear(true)
+        }
     }
     
     func showActivityView() {

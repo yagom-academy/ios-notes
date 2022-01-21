@@ -3,23 +3,19 @@ import UIKit
 final class NotesTableViewController: UITableViewController {
 
     @IBOutlet weak var plus: UIBarButtonItem!
-    private var noteCoreDatas: [NoteEntity] = [] {
-        willSet(newValue) {
-            tableView.reloadData()
-        }
-    }
+    private var noteCoreDatas: [NoteEntity] = []
     private var noteDataObservation: NSKeyValueObservation?
-    let appDelegate = UIApplication.shared.delegate as? AppDelegate
-    let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
+    weak var appDelegate = UIApplication.shared.delegate as? AppDelegate
+    weak var sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
 //        let notes = Decoder.decodeJSONData(type: [Note].self, from: "sample") ?? []
 //        guard let context = appDelegate?.persistentContainer.viewContext else {return}
+//        let fetchRequest = NoteEntity.fetchRequest()
         loadCoreData()
         // Uncomment the following line to preserve selection between presentations
          self.clearsSelectionOnViewWillAppear = true
-
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
@@ -42,7 +38,7 @@ final class NotesTableViewController: UITableViewController {
         }
     }
     
-    func loadCoreData() {
+    public func loadCoreData() {
         guard let context = appDelegate?.persistentContainer.viewContext else {return}
         let fetchRequest = NoteEntity.fetchRequest()
         do {
