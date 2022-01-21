@@ -27,8 +27,19 @@ final class NotesTableViewController: UITableViewController, ModifyDelegate {
     }
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-        self.selectedNote = nil
-        self.showNoteDetail(note: nil)
+        // 빈 노트 아이템 추가
+        let newNote = Note(
+            id: UUID().uuidString,
+            title: "",
+            contents: "",
+            entireContents: "",
+            date: Date()
+        )
+        self.noteDetailViewModel.addOrUpdateNote(note: newNote) {
+            self.noteListViewModel.notes()
+        }
+
+        self.showNoteDetail(note: newNote)
     }
 
     private func setViewModel() {
@@ -49,6 +60,7 @@ final class NotesTableViewController: UITableViewController, ModifyDelegate {
             self.noteList?.remove(at: indexPath.row)
             DispatchQueue.main.async {
                 self.noteTableView.deleteRows(at: [indexPath], with: .fade)
+                self.noteViewController?.noteTextView.text = ""
             }
         }
     }
@@ -88,13 +100,11 @@ final class NotesTableViewController: UITableViewController, ModifyDelegate {
 // MARK: - Table view delegate
 extension NotesTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // edit 화면에서 입력중이던 내용 저장
-        self.noteViewController?.addOrUpdateNote()
-
         self.selectedNote = noteList?[indexPath.row]
         self.showNoteDetail(note: self.selectedNote)
     }
 
+    // swipe(<-): delete note
     override func tableView(
         _ tableView: UITableView,
         trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
@@ -111,6 +121,7 @@ extension NotesTableViewController {
         return UISwipeActionsConfiguration(actions: [delete])
     }
 
+    // swipe(->): share note
     override func tableView(
         _ tableView: UITableView,
         leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath

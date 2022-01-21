@@ -12,7 +12,7 @@ protocol ModifyDelegate {
 
 final class NoteViewController: UIViewController {
 
-    @IBOutlet private weak var noteTextView: UITextView!
+    @IBOutlet weak var noteTextView: UITextView!
 
     private var noteDetailViewModel = NoteDetailViewModel()
     var noteTableViewController: NotesTableViewController?
@@ -23,10 +23,14 @@ final class NoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
         self.noteTextView.delegate = self
         self.setViewModel()
         self.noteDetailViewModel.note(id: note?.id)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
         self.setViews()
     }
 
@@ -54,18 +58,22 @@ final class NoteViewController: UIViewController {
     func setViews() {
         self.willAddOrUpdateNote = true
         DispatchQueue.main.async {
-            guard let note = self.note else {
-                self.noteTextView.text = ""
-                return
-            }
+            guard let note = self.note else { return }
 
             self.noteTextView.text = note.entireContents
         }
     }
 
     func addOrUpdateNote() {
-        guard let entireContents = self.noteTextView.text else { return }
-        guard entireContents != "" else { return }
+        guard let entireContents = self.noteTextView.text,
+              var note = self.note else {
+                  return
+              }
+
+        if entireContents == "" {
+            self.deleteNote()
+            return
+        }
 
         var splitText = self.noteTextView.text
             .split(separator: "\n")
@@ -76,18 +84,6 @@ final class NoteViewController: UIViewController {
         let title = splitText[0]
         splitText.removeFirst()
         let contents = splitText.joined(separator: "\n")
-
-        if self.note == nil {
-            note = Note(
-                id: UUID().uuidString,
-                title: title,
-                contents: contents,
-                entireContents: entireContents,
-                date: Date()
-            )
-        }
-
-        guard var note = self.note else { return }
 
         note.title = title
         note.contents = contents
@@ -152,7 +148,7 @@ final class NoteViewController: UIViewController {
 }
 
 extension NoteViewController: UITextViewDelegate {
-    func textViewDidEndEditing(_ textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         self.addOrUpdateNote()
     }
 }
