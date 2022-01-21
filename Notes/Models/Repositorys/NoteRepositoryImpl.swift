@@ -19,8 +19,8 @@ struct NoteRepositoryImpl: NoteRepository {
         })
         return container
     }()
-    private let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
     private let request: NSFetchRequest<NoteEntity> = NoteEntity.fetchRequest()
+//    let context = persistentContainer.viewContext
 
     func notes(completion: @escaping ([Note]?) -> Void) {
         let context = persistentContainer.viewContext

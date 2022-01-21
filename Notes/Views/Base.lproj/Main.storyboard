@@ -159,10 +159,10 @@
             </objects>
             <point key="canvasLocation" x="-665" y="335"/>
         </scene>
-        <!--Note Split View Controller-->
+        <!--Split View Controller-->
         <scene sceneID="CxU-TR-G4T">
             <objects>
-                <splitViewController allowDoubleColumnStyle="YES" preferredDisplayMode="beside" behavior="tile" id="vXc-KE-pfv" customClass="NoteSplitViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
+                <splitViewController allowDoubleColumnStyle="YES" preferredDisplayMode="beside" behavior="tile" id="vXc-KE-pfv" sceneMemberID="viewController">
                     <connections>
                         <segue destination="b0H-9p-OiM" kind="relationship" relationship="masterViewController" id="2rH-yd-ZC9"/>
                         <segue destination="Zt9-U1-hJ8" kind="relationship" relationship="detailViewController" id="gRc-Gy-lQ3"/>

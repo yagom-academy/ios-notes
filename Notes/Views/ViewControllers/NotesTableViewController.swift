@@ -27,7 +27,7 @@ final class NotesTableViewController: UITableViewController, ModifyDelegate {
     }
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-        // 빈 노트 아이템 추가
+        // add empty note item
         let newNote = Note(
             id: UUID().uuidString,
             title: "",
@@ -79,8 +79,6 @@ final class NotesTableViewController: UITableViewController, ModifyDelegate {
         noteViewController.setViews()
         if splitViewController.isCollapsed == true {
             splitViewController.showDetailViewController(noteNavigationController, sender: nil)
-        } else {
-//            noteViewController.setViews()
         }
     }
 
@@ -105,12 +103,8 @@ extension NotesTableViewController {
     }
 
     // swipe(<-): delete note
-    override func tableView(
-        _ tableView: UITableView,
-        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
-    ) -> UISwipeActionsConfiguration? {
-        let delete = UIContextualAction(style: .normal, title: "delete") {
-            (UIContextualAction, UIView, success: @escaping (Bool) -> Void) in
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .normal, title: "delete") { (UIContextualAction, UIView, success: @escaping (Bool) -> Void) in
             guard let noteList = self.noteList else { return }
 
             let note = noteList[indexPath.row]
@@ -122,12 +116,8 @@ extension NotesTableViewController {
     }
 
     // swipe(->): share note
-    override func tableView(
-        _ tableView: UITableView,
-        leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath
-    ) -> UISwipeActionsConfiguration? {
-        let share = UIContextualAction(style: .normal, title: "Share") {
-            (UIContextualAction, UIView, success: @escaping (Bool) -> Void) in
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let share = UIContextualAction(style: .normal, title: "Share") { (UIContextualAction, UIView, success: @escaping (Bool) -> Void) in
             guard let noteList = self.noteList else { return }
 
             self.callActivityViewController(entireContents: noteList[indexPath.row].entireContents)
@@ -145,10 +135,7 @@ extension NotesTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: NoteTableViewCell.reuseIdentifier,
-            for: indexPath
-        ) as? NoteTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier, for: indexPath) as? NoteTableViewCell else {
             return UITableViewCell()
         }
 
@@ -169,20 +156,4 @@ extension NotesTableViewController {
 
         return cell
     }
-
-//    override func tableView(
-//        _ tableView: UITableView,
-//        commit editingStyle: UITableViewCell.EditingStyle,
-//        forRowAt indexPath: IndexPath
-//    ) {
-//        switch editingStyle {
-//        case .delete:
-//            guard let noteList = self.noteList else { return }
-//
-//            let note = noteList[indexPath.row]
-//            self.deleteNote(note: note, indexPath: indexPath)
-//        default:
-//            return
-//        }
-//    }
 }
