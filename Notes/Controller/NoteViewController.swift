@@ -24,7 +24,6 @@ final class NoteViewController: UIViewController {
         }
         if UITraitCollection.current.horizontalSizeClass == .regular {
             guard let secondNavigationController: NotesTableViewController = splitViewController?.viewControllers[0] as? NotesTableViewController else { return }
-            secondNavigationController.loadCoreData()
             secondNavigationController.viewWillAppear(true)
         }
     }
