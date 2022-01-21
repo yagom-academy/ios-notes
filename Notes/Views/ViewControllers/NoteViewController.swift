@@ -6,6 +6,10 @@
 
 import UIKit
 
+protocol ModifyDelegate {
+    func modify()
+}
+
 final class NoteViewController: UIViewController {
 
     @IBOutlet private weak var noteTextView: UITextView!
@@ -14,11 +18,13 @@ final class NoteViewController: UIViewController {
     var noteTableViewController: NotesTableViewController?
     var note: Note?
     private var willAddOrUpdateNote = true
+    var delegate: ModifyDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.willAddOrUpdateNote = true
+
+        self.noteTextView.delegate = self
         self.setViewModel()
         self.noteDetailViewModel.note(id: note?.id)
         self.setViews()
@@ -45,7 +51,8 @@ final class NoteViewController: UIViewController {
         }
     }
 
-    private func setViews() {
+    func setViews() {
+        self.willAddOrUpdateNote = true
         DispatchQueue.main.async {
             guard let note = self.note else {
                 self.noteTextView.text = ""
@@ -56,8 +63,9 @@ final class NoteViewController: UIViewController {
         }
     }
 
-    private func addOrUpdateNote() {
+    func addOrUpdateNote() {
         guard let entireContents = self.noteTextView.text else { return }
+        guard entireContents != "" else { return }
 
         var splitText = self.noteTextView.text
             .split(separator: "\n")
@@ -88,19 +96,24 @@ final class NoteViewController: UIViewController {
         self.noteDetailViewModel.addOrUpdateNote(note: note) { [weak self] in
             guard let self = self else { return }
 
-            self.noteTableViewController?.noteListViewModel.notes()
+            self.delegate?.modify()
         }
     }
 
     private func deleteNote() {
         guard let note = self.note else { return }
+
         self.noteDetailViewModel.deleteNote(note: note) { [weak self] in
             guard let self = self else { return }
             
-            self.noteTableViewController?.noteListViewModel.notes()
             DispatchQueue.main.async {
+                self.delegate?.modify()
                 self.willAddOrUpdateNote = false
-                self.navigationController?.popViewController(animated: true)
+                if self.splitViewController?.isCollapsed == true {
+                    self.noteTableViewController?.navigationController?.popViewController(animated: true)
+                } else {
+                    self.noteTextView.text = ""
+                }
             }
         }
     }
@@ -109,7 +122,7 @@ final class NoteViewController: UIViewController {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
         let share = UIAlertAction(title: ActionSheetType.shareNote.description, style: .default, handler: {_ in
-            self.callActivityViewController(entireContents: self.noteTextView.text)
+            self.noteTableViewController?.callActivityViewController(entireContents: self.noteTextView.text)
         })
         let delete = UIAlertAction(title: ActionSheetType.deleteNote.description, style: .destructive, handler: {_ in
             self.showAlert(title: Constant.alertTitle, message: Constant.alertMessage)
@@ -126,8 +139,8 @@ final class NoteViewController: UIViewController {
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 
-        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        let delete = UIAlertAction(title: "삭제", style: .destructive, handler: {_ in
+        let cancel = UIAlertAction(title: AlertType.cancel.description, style: .cancel, handler: nil)
+        let delete = UIAlertAction(title: AlertType.deleteNote.description, style: .destructive, handler: {_ in
             self.deleteNote()
         })
 
@@ -136,12 +149,10 @@ final class NoteViewController: UIViewController {
 
         self.present(alert, animated: true, completion: nil)
     }
+}
 
-    private func callActivityViewController(entireContents: String) {
-        let activityViewController = UIActivityViewController(
-            activityItems: [entireContents],
-            applicationActivities: nil
-        )
-        self.present(activityViewController, animated: true, completion: nil)
+extension NoteViewController: UITextViewDelegate {
+    func textViewDidEndEditing(_ textView: UITextView) {
+        self.addOrUpdateNote()
     }
 }

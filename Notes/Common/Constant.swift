@@ -7,7 +7,6 @@
 
 struct Constant {
     static let rotateScreenNotificationName = "UIDeviceOrientationDidChangeNotification"
-    static let noteDetailSegue = "moveNoteDetailIdentifier"
     static let actionSheetshareNoteDescription = "Share..."
     static let actionSheetdeleteNoteDescription = "Delete"
     static let actionSheetCancelDescription = "Cancel"
