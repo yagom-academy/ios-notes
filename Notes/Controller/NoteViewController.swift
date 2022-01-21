@@ -5,6 +5,7 @@
 // 
 
 import UIKit
+import CoreData
 
 final class NoteViewController: UIViewController {
 
@@ -13,9 +14,12 @@ final class NoteViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setData()
         noteTextView.adjustsFontForContentSizeCategory = true
         noteTextView.font = UIFont.preferredFont(forTextStyle: .body)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -25,5 +29,9 @@ final class NoteViewController: UIViewController {
     
     private func setData() {
         noteTextView.text = data
+    }
+    
+    func reload() {
+        setData()
     }
 }
