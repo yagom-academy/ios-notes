@@ -65,7 +65,7 @@ final class NotesTableViewController: UITableViewController {
     }
 }
 
-extension NotesTableViewController :NoteEdittedDelegate {
+extension NotesTableViewController :NoteEditionDelegate {
     func share(_ note: Note) {
         let shareText: String = "\(note.content ?? "")"
         var shareObject = [Any]()
@@ -93,8 +93,4 @@ extension NotesTableViewController :NoteEdittedDelegate {
         tableView.reloadData()
     }
     
-}
-
-protocol NoteSelectionDelegate: AnyObject {
-    func noteSelected(_ note: Note)
 }

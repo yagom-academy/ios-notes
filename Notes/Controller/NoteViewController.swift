@@ -6,16 +6,10 @@
 
 import UIKit
 
-protocol NoteEdittedDelegate: AnyObject {
-    func notifyNoteEditted()
-    func share(_ note: Note)
-    func delete(_ note: Note)
-}
-
 final class NoteViewController: UIViewController {
 
     @IBOutlet private weak var noteTextView: UITextView!
-    weak var delegate: NoteEdittedDelegate?
+    weak var delegate: NoteEditionDelegate?
     var note: Note?
     
     override func viewDidLoad() {
