@@ -53,13 +53,9 @@ final class NotesTableViewController: UITableViewController {
     }
     
     @IBAction func touchUpAddButton(_ sender: Any) {
-//        let newNoteView = NewNoteViewController()
-//        newNoteView.modalPresentationStyle = .fullScreen
-//        self.present(newNoteView, animated: true, completion: nil)
-        
         guard let noteViewController = secondNavigationController?.children.first as? NoteViewController else { return }
         
-        noteViewController.data = UserNotes()
+        noteViewController.data = nil
         if UITraitCollection.current.horizontalSizeClass == .regular {
             noteViewController.reload()
         }
