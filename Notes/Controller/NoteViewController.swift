@@ -22,7 +22,6 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print(self)
         setData()
     }
     
@@ -32,16 +31,12 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
     }
     
     private func setData() {
-        print(data?.title)
-        print(data?.noteBody)
-        
         
         if let title = data?.title, let noteBody = data?.noteBody {
             noteTextView.text = "\(title)\n\(noteBody)"
         } else {
             noteTextView.text = ""
         }
-        
     }
     
     func reload() {
@@ -52,64 +47,63 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
         guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return }
         let context = container.viewContext
         if data == nil {
-            // save new note
-            let entity = NSEntityDescription.entity(forEntityName: "UserNotes", in: context)
-            guard let entity = entity else { return }
+            saveNewNote(context)
+        } else {
+            updateNote(context)
+        }
+    }
+    
+    func saveNewNote(_ context: NSManagedObjectContext) {
+        let entity = NSEntityDescription.entity(forEntityName: "UserNotes", in: context)
+        guard let entity = entity else { return }
 
-            let noteEntity = UserNotes(entity: entity, insertInto: context)
-            
-            noteEntity.setValue(UUID(), forKey: "id")
-            
+        let noteEntity = UserNotes(entity: entity, insertInto: context)
+        
+        noteEntity.setValue(UUID(), forKey: "id")
+        
+        var stringComponents = noteTextView.text.split(separator: "\n")
+        if stringComponents.count > 0 {
+            noteEntity.setValue(stringComponents[0], forKey: "title")
+            stringComponents.remove(at: 0)
+            noteEntity.setValue(stringComponents.joined(separator: "\n"), forKey: "noteBody")
+        }
+        
+        let time = Double(Date().timeIntervalSince1970)
+        noteEntity.setValue(time, forKey: "lastModifiedDate")
+        
+        do {
+            try context.save()
+            data = noteEntity
+        } catch {
+            print(error)
+        }
+    }
+    
+    func updateNote(_ context: NSManagedObjectContext) {
+        let updateRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "UserNotes")
+        updateRequest.predicate = NSPredicate(format: "id == %@", data!.id as NSUUID)
+        do {
+            let updateObject = try context.fetch(updateRequest)[0] as? NSManagedObject
             var stringComponents = noteTextView.text.split(separator: "\n")
-            if stringComponents.count > 0 {
-                print("in save process")
-                print(stringComponents)
-                noteEntity.setValue(stringComponents[0], forKey: "title")
-                stringComponents.remove(at: 0)
-                print(stringComponents)
-                noteEntity.setValue(stringComponents.joined(separator: "\n"), forKey: "noteBody")
-            } else {
-                noteEntity.setValue("", forKey: "title")
-                noteEntity.setValue("", forKey: "noteBody")
+            if stringComponents.count == 0 {
+                // delete note
+                return
             }
+            updateObject?.setValue(stringComponents[0], forKey: "title")
+            stringComponents.remove(at: 0)
+            updateObject?.setValue(stringComponents.joined(separator: "\n"), forKey: "noteBody")
             
             let time = Double(Date().timeIntervalSince1970)
-            noteEntity.setValue(time, forKey: "lastModifiedDate")
-            
+            updateObject?.setValue(time, forKey: "lastModifiedDate")
             
             do {
                 try context.save()
-                data = noteEntity
-            } catch {
-                print("note save fail")
-            }
-            
-        } else {
-            // update note
-            let updateRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "UserNotes")
-            updateRequest.predicate = NSPredicate(format: "id == %@", data!.id as NSUUID)
-            do {
-                let updateObject = try context.fetch(updateRequest)[0] as? NSManagedObject
-                var stringComponents = noteTextView.text.split(separator: "\n")
-                updateObject?.setValue(stringComponents[0], forKey: "title")
-                stringComponents.remove(at: 0)
-                updateObject?.setValue(stringComponents.joined(separator: "\n"), forKey: "noteBody")
-                
-                let time = Double(Date().timeIntervalSince1970)
-                updateObject?.setValue(time, forKey: "lastModifiedDate")
-                
-                do {
-                    try context.save()
-                    print("noted updated")
-                } catch {
-                    print(error)
-                }
-                
             } catch {
                 print(error)
             }
+            
+        } catch {
+            print(error)
         }
-        
-        
     }
 }

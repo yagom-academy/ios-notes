@@ -16,17 +16,10 @@ final class NotesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        if let decodedData = decodeJSONData(type: [NoteForm].self, from: "sample") {
-//            self.notes = decodedData
-//        }
         
         guard let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else { return }
         firstNavigationController = sceneDelegate.firstNavigationController
         secondNavigationController = sceneDelegate.secondNavigationController
-        
-        
-//        print(splitViewController?.children)
-//        print(splitViewController?.viewControllers)
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = true
@@ -37,6 +30,7 @@ final class NotesTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.notes = fetchNoteData()
+        self.notes.reverse()
         noteListTable.reloadData()
     }
     
@@ -86,7 +80,6 @@ final class NotesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        guard let noteViewController = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as? NoteViewController else { return }
         guard let noteViewController = secondNavigationController?.children.first as? NoteViewController else { return }
         
         noteViewController.data = notes[indexPath.row]
@@ -94,12 +87,11 @@ final class NotesTableViewController: UITableViewController {
             noteViewController.reload()
         }
         
-        
         guard let secondNavigationController = secondNavigationController else {
             return
         }
 
-        splitViewController?.showDetailViewController(secondNavigationController,sender: self)
+        splitViewController?.showDetailViewController(secondNavigationController, sender: self)
         noteListTable.deselectRow(at: indexPath, animated: true)
     }
     
