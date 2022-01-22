@@ -17,12 +17,12 @@ class NoteListViewModel {
         }
     }
 
-    func notes() {
-        repository.notes { [weak self] noteList in
-            guard let self = self else { return }
-            guard let noteList = noteList else {
-                return
-            }
+    func fetchNotes() {
+        repository.fetchNotes { [weak self] noteList in
+            guard let self = self,
+                  let noteList = noteList else {
+                      return
+                  }
 
             self.noteList = noteList
         }

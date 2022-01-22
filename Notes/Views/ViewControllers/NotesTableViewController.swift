@@ -23,20 +23,15 @@ final class NotesTableViewController: UITableViewController, ModifyDelegate {
 
         self.noteViewController?.delegate = self
         self.setViewModel()
-        self.noteListViewModel.notes()
+        self.noteListViewModel.fetchNotes()
     }
 
-    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-        // add empty note item
-        let newNote = Note(
-            id: UUID().uuidString,
-            title: "",
-            contents: "",
-            entireContents: "",
-            date: Date()
-        )
-        self.noteDetailViewModel.addOrUpdateNote(note: newNote) {
-            self.noteListViewModel.notes()
+    @IBAction func pressAddButton(_ sender: UIBarButtonItem) {
+        let newNote = self.createEmptyNote()
+        self.noteDetailViewModel.addNote(note: newNote) { [weak self] in
+            guard let self = self else { return }
+
+            self.noteListViewModel.fetchNotes()
         }
 
         self.showNoteDetail(note: newNote)
@@ -65,6 +60,17 @@ final class NotesTableViewController: UITableViewController, ModifyDelegate {
         }
     }
 
+    private func createEmptyNote() -> Note {
+        let newNote = Note(
+            id: UUID().uuidString,
+            title: "",
+            contents: "",
+            entireContents: "",
+            date: Date()
+        )
+        return newNote
+    }
+
     private func showNoteDetail(note: Note?) {
         guard let noteNavigationController = self.noteNavigationController,
               let noteViewController = self.noteViewController else {
@@ -91,7 +97,7 @@ final class NotesTableViewController: UITableViewController, ModifyDelegate {
     }
 
     func modify() {
-        self.noteListViewModel.notes()
+        self.noteListViewModel.fetchNotes()
     }
 }
 
@@ -99,6 +105,13 @@ final class NotesTableViewController: UITableViewController, ModifyDelegate {
 extension NotesTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.selectedNote = noteList?[indexPath.row]
+
+        let topIndexPath = IndexPath(row: 0, section: 0)
+        if let topInexPathNote = noteList?[topIndexPath.row],
+           topInexPathNote.entireContents == "" {
+            self.deleteNote(note: topInexPathNote, indexPath: topIndexPath)
+        }
+
         self.showNoteDetail(note: self.selectedNote)
     }
 
@@ -120,7 +133,10 @@ extension NotesTableViewController {
         let share = UIContextualAction(style: .normal, title: "Share") { (UIContextualAction, UIView, success: @escaping (Bool) -> Void) in
             guard let noteList = self.noteList else { return }
 
-            self.callActivityViewController(entireContents: noteList[indexPath.row].entireContents)
+            ViewControllerCaller.callActivityViewController(
+                entireContents: noteList[indexPath.row].entireContents,
+                viewController: self
+            )
             success(true)
         }
         share.backgroundColor = .systemTeal
@@ -135,25 +151,12 @@ extension NotesTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier, for: indexPath) as? NoteTableViewCell else {
-            return UITableViewCell()
-        }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier, for: indexPath) as? NoteTableViewCell,
+              let noteList = self.noteList else {
+                  return UITableViewCell()
+              }
 
-        guard let noteList = self.noteList else {
-            return cell
-        }
-
-        cell.titleLabel.text = noteList[indexPath.row].title
-        cell.shortDescriptionLabel.text = noteList[indexPath.row].contents
-
-        let dateFormatter = DateFormatter()
-        if let localeID = Locale.preferredLanguages.first {
-            dateFormatter.locale = Locale(identifier: localeID)
-        }
-
-        dateFormatter.dateStyle = .short
-        cell.dateLabel.text = dateFormatter.string(from: noteList[indexPath.row].date)
-
+        cell.updateCell(note: noteList[indexPath.row])
         return cell
     }
 }

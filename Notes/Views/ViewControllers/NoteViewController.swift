@@ -6,26 +6,27 @@
 
 import UIKit
 
-protocol ModifyDelegate {
+protocol ModifyDelegate: AnyObject {
     func modify()
 }
 
 final class NoteViewController: UIViewController {
 
     @IBOutlet weak var noteTextView: UITextView!
+    @IBOutlet weak var moreDetailButton: UIBarButtonItem!
 
     private var noteDetailViewModel = NoteDetailViewModel()
     var noteTableViewController: NotesTableViewController?
     var note: Note?
-    private var willAddOrUpdateNote = true
-    var delegate: ModifyDelegate?
+    private var willUpdateNote = true
+    weak var delegate: ModifyDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.noteTextView.delegate = self
         self.setViewModel()
-        self.noteDetailViewModel.note(id: note?.id)
+        self.noteDetailViewModel.fetchNoteById(id: note?.id)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -34,16 +35,8 @@ final class NoteViewController: UIViewController {
         self.setViews()
     }
 
-    @IBAction func moreDetailsButtonPressed(_ sender: UIBarButtonItem) {
+    @IBAction func presseMoreDetailsButton(_ sender: UIBarButtonItem) {
         showActionSheet()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        if self.willAddOrUpdateNote {
-            self.addOrUpdateNote()
-        }
     }
 
     private func setViewModel() {
@@ -56,7 +49,7 @@ final class NoteViewController: UIViewController {
     }
 
     func setViews() {
-        self.willAddOrUpdateNote = true
+        self.willUpdateNote = true
         DispatchQueue.main.async {
             guard let note = self.note else { return }
 
@@ -64,32 +57,23 @@ final class NoteViewController: UIViewController {
         }
     }
 
-    func addOrUpdateNote() {
+    func addNote() {
+        let newNote = self.createEmptyNote()
+        self.noteDetailViewModel.addNote(note: newNote) { [weak self] in
+            guard let self = self else { return }
+
+            self.delegate?.modify()
+        }
+    }
+
+    func updateNote() {
         guard let entireContents = self.noteTextView.text,
               var note = self.note else {
                   return
               }
 
-        if entireContents == "" {
-            self.deleteNote()
-            return
-        }
-
-        var splitText = self.noteTextView.text
-            .split(separator: "\n")
-            .map {
-                String($0)
-            }
-
-        let title = splitText[0]
-        splitText.removeFirst()
-        let contents = splitText.joined(separator: "\n")
-
-        note.title = title
-        note.contents = contents
-        note.entireContents = entireContents
-        note.date = Date()
-        self.noteDetailViewModel.addOrUpdateNote(note: note) { [weak self] in
+        self.modifyNoteProperty(note: &note, noteText: entireContents)
+        self.noteDetailViewModel.updateNote(note: note) { [weak self] in
             guard let self = self else { return }
 
             self.delegate?.modify()
@@ -101,24 +85,63 @@ final class NoteViewController: UIViewController {
 
         self.noteDetailViewModel.deleteNote(note: note) { [weak self] in
             guard let self = self else { return }
-            
+
+            self.willUpdateNote = false
             DispatchQueue.main.async {
-                self.delegate?.modify()
-                self.willAddOrUpdateNote = false
                 if self.splitViewController?.isCollapsed == true {
                     self.noteTableViewController?.navigationController?.popViewController(animated: true)
                 } else {
+                    self.note = nil
                     self.noteTextView.text = ""
                 }
+                self.delegate?.modify()
             }
         }
+    }
+
+    private func createEmptyNote() -> Note {
+        let newNote = Note(
+            id: UUID().uuidString,
+            title: "",
+            contents: "",
+            entireContents: "",
+            date: Date()
+        )
+        return newNote
+    }
+
+    private func modifyNoteProperty(note: inout Note, noteText: String) {
+        var splitText = noteText
+            .split(separator: "\n")
+            .map {
+                String($0)
+            }
+        guard splitText.count > 0 else {
+            note.title = ""
+            note.contents = ""
+            note.entireContents = ""
+            note.date = Date()
+            return
+        }
+
+        let title = splitText[0]
+        splitText.removeFirst()
+        let contents = splitText.joined(separator: "\n")
+
+        note.title = title
+        note.contents = contents
+        note.entireContents = noteText
+        note.date = Date()
     }
 
     private func showActionSheet() {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
         let share = UIAlertAction(title: ActionSheetType.shareNote.description, style: .default, handler: {_ in
-            self.noteTableViewController?.callActivityViewController(entireContents: self.noteTextView.text)
+            ViewControllerCaller.callActivityViewController(
+                entireContents: self.noteTextView.text,
+                viewController: self
+            )
         })
         let delete = UIAlertAction(title: ActionSheetType.deleteNote.description, style: .destructive, handler: {_ in
             self.showAlert(title: Constant.alertTitle, message: Constant.alertMessage)
@@ -128,6 +151,10 @@ final class NoteViewController: UIViewController {
         actionSheet.addAction(share)
         actionSheet.addAction(delete)
         actionSheet.addAction(cancel)
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            actionSheet.popoverPresentationController?.barButtonItem = self.moreDetailButton
+        }
         
         self.present(actionSheet, animated: true, completion: nil)
     }
@@ -149,6 +176,6 @@ final class NoteViewController: UIViewController {
 
 extension NoteViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        self.addOrUpdateNote()
+        self.updateNote()
     }
 }

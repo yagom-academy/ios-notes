@@ -10,6 +10,6 @@ struct NoteRepositoryInjection {
     private init() { }
 
     static func injectExpositionRepository() -> NoteRepository {
-        return NoteRepositoryImpl()
+        return NoteRepositoryDeviceDBImplementation()
     }
 }

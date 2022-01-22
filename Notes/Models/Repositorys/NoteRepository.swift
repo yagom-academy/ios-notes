@@ -8,8 +8,9 @@
 import Foundation
 
 protocol NoteRepository {
-    func notes(completion: @escaping ([Note]?) -> Void)
-    func note(id: String?, completion: @escaping (Note?) -> Void)
-    func addOrUpdateNote(note: Note, completion: @escaping () -> Void)
+    func fetchNotes(completion: @escaping ([Note]?) -> Void)
+    func fetchNoteById(id: String?, completion: @escaping (Note?) -> Void)
+    func addNote(note: Note, completion: @escaping () -> Void)
+    func updateNote(note: Note, completion: @escaping () -> Void)
     func deleteNote(note: Note, completion: @escaping () -> Void)
 }

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import CoreData
 
 class NoteDetailViewModel {
     private let repository: NoteRepository = NoteRepositoryInjection.injectExpositionRepository()
@@ -18,18 +17,24 @@ class NoteDetailViewModel {
         }
     }
 
-    func note(id: String?) {
+    func fetchNoteById(id: String?) {
         guard let id = id else { return }
 
-        repository.note(id: id) { [weak self] note in
+        repository.fetchNoteById(id: id) { [weak self] note in
             guard let self = self else { return }
 
             self.note = note
         }
     }
 
-    func addOrUpdateNote(note: Note, completion: @escaping () -> Void) {
-        repository.addOrUpdateNote(note: note) {
+    func addNote(note: Note, completion: @escaping () -> Void) {
+        repository.addNote(note: note) {
+            completion()
+        }
+    }
+
+    func updateNote(note: Note, completion: @escaping () -> Void) {
+        repository.updateNote(note: note) {
             completion()
         }
     }
