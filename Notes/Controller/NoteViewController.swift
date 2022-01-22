@@ -10,28 +10,81 @@ final class NoteViewController: UIViewController {
 
     @IBOutlet private weak var noteTextView: UITextView!
 
-    var note: Note?
+    var mainViewContoller: MainSplitViewController?
+
     var notePosition: Int?
+    var note: Note?
+
+    private let defaultText = "편집할 메모를 선택하거나, 새로운 메모를 추가해주세요!"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let noteText = note?.toViewForm() else {
-            noteTextView.isEditable = false
-            noteTextView.isSelectable = false
+        mainViewContoller = splitViewController as? MainSplitViewController
+        noteTextView.delegate = self
+        configureContent(note: note)
+    }
+
+    private func configureContent(note: Note?) {
+        guard let note = note else {
             return
         }
-        noteTextView.text = noteText
-        noteTextView.delegate = self
+        noteTextView.text = note.title + "\n" + note.content
+        noteTextView.isEditable = true
+        noteTextView.isSelectable = true
+
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        navigationItem.rightBarButtonItem?.target = self
+        navigationItem.rightBarButtonItem?.action = #selector(menuButtonTouchUp(_:))
+    }
+
+    func deactivateContent() {
+        notePosition = nil
+        noteTextView.isEditable = false
+        noteTextView.isSelectable = false
+        noteTextView.text = defaultText
+        navigationItem.rightBarButtonItem?.isEnabled = false
+    }
+
+    private func shareNoteAction(action: UIAlertAction) {
+    }
+
+    private func deleteNoteAction(action: UIAlertAction) {
+        guard let notePosition = notePosition else {
+            return
+        }
+        mainViewContoller?.deleteNote(at: notePosition)
+    }
+
+    @objc private func menuButtonTouchUp(_ sender: Any) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+        let shareAction = UIAlertAction(title: "공유", style: .default, handler: shareNoteAction)
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive, handler: deleteNoteAction)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+
+        alert.addAction(shareAction)
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+
+        present(alert, animated: true, completion: nil)
     }
 }
 
 extension NoteViewController: UITextViewDelegate {
     func textViewDidChangeSelection(_ textView: UITextView) {
-        let viewFormNote: String = textView.text
-        guard let noteID = note?.id, let position = notePosition else {
+        guard let notePosition = notePosition else {
             return
         }
-        let newNote = Note.makeFromViewForm(viewFormNote, id: noteID)
-        (splitViewController as? MainSplitViewController)?.updateNote(at: position, with: newNote)
+        let splitTexts = textView.text.split(separator: "\n", maxSplits: 1)
+
+        let changedTitle = String(splitTexts.first ?? Substring())
+        let changedContent: String
+        if splitTexts.count == 2, let lastSubstring = splitTexts.last {
+            changedContent = String(lastSubstring)
+        } else {
+            changedContent = ""
+        }
+
+        mainViewContoller?.updateNote(at: notePosition, title: changedTitle, content: changedContent)
     }
 }

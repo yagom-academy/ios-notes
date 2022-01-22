@@ -14,6 +14,12 @@ final class NotesTableViewController: UITableViewController {
         super.viewDidLoad()
         self.mainViewController = splitViewController as? MainSplitViewController
         mainViewController?.noteTableViewController = self
+        navigationItem.rightBarButtonItem?.target = self
+        navigationItem.rightBarButtonItem?.action = #selector(addButtonTouchedUp(_:))
+    }
+
+    @objc private func addButtonTouchedUp(_ sender: Any) {
+        mainViewController?.addNote()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
