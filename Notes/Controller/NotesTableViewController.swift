@@ -10,15 +10,15 @@ import CoreData
 final class NotesTableViewController: UITableViewController {
 
     @IBOutlet var noteListTable: UITableView!
-    private var notes: [NoteForm] = []
+    private var notes: [UserNotes] = []
     var firstNavigationController: UINavigationController?
     var secondNavigationController: UINavigationController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let decodedData = decodeJSONData(type: [NoteForm].self, from: "sample") {
-            self.notes = decodedData
-        }
+//        if let decodedData = decodeJSONData(type: [NoteForm].self, from: "sample") {
+//            self.notes = decodedData
+//        }
         
         guard let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else { return }
         firstNavigationController = sceneDelegate.firstNavigationController
@@ -35,10 +35,10 @@ final class NotesTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        self.notes = fetchNoteData()
-//        noteListTable.reloadData()
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.notes = fetchNoteData()
+        noteListTable.reloadData()
+    }
     
     func fetchNoteData() -> [UserNotes] {
         guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return [] }

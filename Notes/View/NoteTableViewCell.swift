@@ -26,7 +26,7 @@ final class NoteTableViewCell: UITableViewCell {
         super.prepareForReuse()
     }
     
-    func setContents(with data: NoteForm) {
+    func setContents(with data: UserNotes) {
         titleLabel.text = data.title
         shortDescriptionLabel.text = data.noteBody
         
