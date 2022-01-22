@@ -46,6 +46,10 @@ final class NoteViewController: UIViewController {
     }
 
     private func shareNoteAction(action: UIAlertAction) {
+        let activityViewContoller = UIActivityViewController(activityItems: [noteTextView.text ?? ""],
+                                                             applicationActivities: nil)
+        activityViewContoller.popoverPresentationController?.sourceView = self.view
+        self.present(activityViewContoller, animated: true, completion: nil)
     }
 
     private func deleteNoteAction(action: UIAlertAction) {
