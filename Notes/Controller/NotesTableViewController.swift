@@ -53,9 +53,23 @@ final class NotesTableViewController: UITableViewController {
     }
     
     @IBAction func touchUpAddButton(_ sender: Any) {
-        let newNoteView = NewNoteViewController()
-        newNoteView.modalPresentationStyle = .fullScreen
-        self.present(newNoteView, animated: true, completion: nil)
+//        let newNoteView = NewNoteViewController()
+//        newNoteView.modalPresentationStyle = .fullScreen
+//        self.present(newNoteView, animated: true, completion: nil)
+        
+        guard let noteViewController = secondNavigationController?.children.first as? NoteViewController else { return }
+        
+        noteViewController.data = UserNotes()
+        if UITraitCollection.current.horizontalSizeClass == .regular {
+            noteViewController.reload()
+        }
+ 
+        guard let secondNavigationController = secondNavigationController else {
+            return
+        }
+
+        splitViewController?.showDetailViewController(secondNavigationController,sender: self)
+        
     }
     
     // MARK: - Table view data source
@@ -79,7 +93,7 @@ final class NotesTableViewController: UITableViewController {
 //        guard let noteViewController = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as? NoteViewController else { return }
         guard let noteViewController = secondNavigationController?.children.first as? NoteViewController else { return }
         
-        noteViewController.data = notes[indexPath.row].noteBody
+        noteViewController.data = notes[indexPath.row]
         if UITraitCollection.current.horizontalSizeClass == .regular {
             noteViewController.reload()
         }
