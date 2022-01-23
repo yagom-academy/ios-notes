@@ -130,7 +130,7 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    private func deleteNote() {
+    func deleteNote() {
         guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return }
         let context = container.viewContext
         guard let deleteData = data else { return }

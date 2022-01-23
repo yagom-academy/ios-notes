@@ -93,6 +93,20 @@ final class NotesTableViewController: UITableViewController {
         splitViewController?.showDetailViewController(secondNavigationController, sender: self)
     }
     
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteButton = UIContextualAction(style: .destructive, title: "Delete", handler: {
+            (action, view, completionHandler) in
+            guard let noteViewController = self.secondNavigationController?.children.first as? NoteViewController else { return }
+            noteViewController.deleteNote()
+        })
+        let shareButton = UIContextualAction(style: .normal, title: "Share", handler: {
+            (action, view, completionHandler) in
+            print("share")
+        })
+        shareButton.backgroundColor = .systemOrange
+        return UISwipeActionsConfiguration(actions: [deleteButton, shareButton])
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
