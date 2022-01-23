@@ -10,7 +10,6 @@ import CoreData
 final class NoteViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet private weak var noteTextView: UITextView!
-    @IBOutlet weak var actionButton: UIBarButtonItem!
     
     var delegate: NotesTableViewController?
     
@@ -24,10 +23,6 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
         noteTextView.adjustsFontForContentSizeCategory = true
         noteTextView.font = UIFont.preferredFont(forTextStyle: .body)
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        setData()
-//    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -46,6 +41,34 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
         setData()
     }
     
+    @IBAction func touchUpActionButton(_ sender: Any) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        let share = UIAlertAction(title: "Share", style: .default) {
+            (action) in
+            self.shareAction()
+        }
+        let delete = UIAlertAction(title: "Delete", style: .destructive) {
+            (action) in
+            self.deleteNote()
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alert.addAction(share)
+        alert.addAction(delete)
+        alert.addAction(cancel)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func shareAction() {
+        let shareText: String? = data?.title
+        var shareObject = [Any]()
+        shareObject.append(shareText)
+        let activityViewController = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view
+        self.present(activityViewController, animated: true, completion: nil)
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
         guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return }
         let context = container.viewContext
@@ -57,7 +80,7 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
         self.delegate?.reloadTableView()
     }
     
-    func saveNewNote(_ context: NSManagedObjectContext) {
+    private func saveNewNote(_ context: NSManagedObjectContext) {
         let entity = NSEntityDescription.entity(forEntityName: "UserNotes", in: context)
         guard let entity = entity else { return }
 
@@ -83,7 +106,7 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    func updateNote(_ context: NSManagedObjectContext) {
+    private func updateNote(_ context: NSManagedObjectContext) {
         
         var stringComponents = noteTextView.text.split(separator: "\n")
         if stringComponents.count == 0 {
@@ -102,6 +125,10 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
         } catch {
             print(error)
         }
+    }
+    
+    private func deleteNote() {
         
+        self.delegate?.reloadTableView()
     }
 }

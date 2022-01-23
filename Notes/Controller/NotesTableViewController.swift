@@ -51,19 +51,7 @@ final class NotesTableViewController: UITableViewController {
     }
     
     @IBAction func touchUpAddButton(_ sender: Any) {
-        guard let noteViewController = secondNavigationController?.children.first as? NoteViewController else { return }
-        
-        noteViewController.data = nil
-        if UITraitCollection.current.horizontalSizeClass == .regular {
-            noteViewController.reload()
-        }
- 
-        guard let secondNavigationController = secondNavigationController else {
-            return
-        }
-
-        splitViewController?.showDetailViewController(secondNavigationController, sender: self)
-        
+        loadNoteView(with: nil)
     }
     
     // MARK: - Table view data source
@@ -84,18 +72,21 @@ final class NotesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        loadNoteView(with: notes[indexPath.row])
+        noteListTable.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func loadNoteView(with noteData: UserNotes?) {
         guard let noteViewController = secondNavigationController?.children.first as? NoteViewController else { return }
         
-        noteViewController.data = notes[indexPath.row]
-        if UITraitCollection.current.horizontalSizeClass == .regular {
-            noteViewController.reload()
-        }
+        noteViewController.data = noteData
+        noteViewController.reload()
+        
         guard let secondNavigationController = secondNavigationController else {
             return
         }
 
         splitViewController?.showDetailViewController(secondNavigationController, sender: self)
-        noteListTable.deselectRow(at: indexPath, animated: true)
     }
     
     /*
