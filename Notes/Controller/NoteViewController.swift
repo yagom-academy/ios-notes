@@ -45,6 +45,9 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func touchUpActionButton(_ sender: Any) {
+        
+        print(UITraitCollection.current.horizontalSizeClass.rawValue)
+   
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         let share = UIAlertAction(title: "Share", style: .default) {
             (action) in
@@ -60,7 +63,13 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
         alert.addAction(delete)
         alert.addAction(cancel)
         
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            if let popoverController = alert.popoverPresentationController {
+                popoverController.barButtonItem = sender as? UIBarButtonItem
+            }
+        }
         present(alert, animated: true, completion: nil)
+        
     }
     
     private func shareAction() {

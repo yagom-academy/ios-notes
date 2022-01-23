@@ -77,6 +77,8 @@ final class NotesTableViewController: UITableViewController {
     }
     
     func loadNoteView(with noteData: UserNotes?) {
+        print(UITraitCollection.current.horizontalSizeClass.rawValue)
+        
         guard let noteViewController = secondNavigationController?.children.first as? NoteViewController else { return }
         
         noteViewController.data = noteData
@@ -95,50 +97,36 @@ final class NotesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteButton = UIContextualAction(style: .destructive, title: "Delete", handler: {
-            (action, view, completionHandler) in
-            guard let noteViewController = self.secondNavigationController?.children.first as? NoteViewController else { return }
-            noteViewController.deleteNote()
+            (_, _, _) in
+            
+            guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return }
+            let context = container.viewContext
+            
+            context.delete(self.notes[indexPath.row])
+            do {
+                try context.save()
+            } catch {
+                print(error)
+            }
+            
+            self.reloadTableView()
+            self.firstNavigationController?.popViewController(animated: true)
+            let rightNote = self.secondNavigationController?.children.first as? NoteViewController
+            rightNote?.data = nil
+            rightNote?.reload()
+            
+            
         })
         let shareButton = UIContextualAction(style: .normal, title: "Share", handler: {
-            (action, view, completionHandler) in
-            print("share")
+            (_, _, _) in
+            let shareText: String? = self.notes[indexPath.row].title
+            var shareObject = [Any]()
+            shareObject.append(shareText)
+            let activityViewController = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
+            activityViewController.popoverPresentationController?.sourceView = self.view
+            self.present(activityViewController, animated: true, completion: nil)
         })
         shareButton.backgroundColor = .systemOrange
         return UISwipeActionsConfiguration(actions: [deleteButton, shareButton])
     }
-    
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 }
