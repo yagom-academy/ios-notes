@@ -77,21 +77,14 @@ final class NotesTableViewController: UITableViewController {
     }
     
     func loadNoteView(with noteData: UserNotes?) {
-        print(UITraitCollection.current.horizontalSizeClass.rawValue)
-        
         guard let noteViewController = secondNavigationController?.children.first as? NoteViewController else { return }
-        
         noteViewController.data = noteData
-        
         if UITraitCollection.current.horizontalSizeClass == .regular {
-            // action 버튼 누르고 나면 얘가 안먹음
             noteViewController.reload()
         }
-        
         guard let secondNavigationController = secondNavigationController else {
             return
         }
-
         splitViewController?.showDetailViewController(secondNavigationController, sender: self)
     }
     
@@ -99,18 +92,8 @@ final class NotesTableViewController: UITableViewController {
         let deleteButton = UIContextualAction(style: .destructive, title: "Delete", handler: {
             (_, _, _) in
             
-            guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return }
-            let context = container.viewContext
+            self.deleteNote(self.notes[indexPath.row], andReload: self)
             
-            context.delete(self.notes[indexPath.row])
-            do {
-                try context.save()
-            } catch {
-                print(error)
-            }
-            
-            self.reloadTableView()
-            self.firstNavigationController?.popViewController(animated: true)
             let rightNote = self.secondNavigationController?.children.first as? NoteViewController
             rightNote?.data = nil
             rightNote?.reload()
@@ -119,14 +102,42 @@ final class NotesTableViewController: UITableViewController {
         })
         let shareButton = UIContextualAction(style: .normal, title: "Share", handler: {
             (_, _, _) in
-            let shareText: String? = self.notes[indexPath.row].title
-            var shareObject = [Any]()
-            shareObject.append(shareText)
-            let activityViewController = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
-            activityViewController.popoverPresentationController?.sourceView = self.view
-            self.present(activityViewController, animated: true, completion: nil)
+            self.setShareAction(with: self.notes[indexPath.row].title, in: self)
         })
         shareButton.backgroundColor = .systemOrange
         return UISwipeActionsConfiguration(actions: [deleteButton, shareButton])
+    }
+    
+    func deleteNote(_ note: UserNotes, andReload target: NotesTableViewController) {
+        guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return }
+        let context = container.viewContext
+        
+        context.delete(note)
+        do {
+            try context.save()
+        } catch {
+            print(error)
+        }
+        
+        target.reloadTableView()
+        target.firstNavigationController?.popViewController(animated: true)
+        
+//        if UITraitCollection.current.horizontalSizeClass == .regular {
+//            currentView.reloadTableView()
+//        } else if UITraitCollection.current.horizontalSizeClass == .compact {
+//            currentView.firstNavigationController?.popViewController(animated: true)
+//        }
+    }
+    
+    func setShareAction(with data: String, in targetview: AnyObject) {
+        print("before share action :: \(UITraitCollection.current.horizontalSizeClass.rawValue)")
+        let shareText: String? = data
+        var shareObject = [Any]()
+        shareObject.append(shareText)
+        let activityViewController = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = targetview.view
+        targetview.present(activityViewController, animated: true, completion: {
+            print("after share action :: \(UITraitCollection.current.horizontalSizeClass.rawValue)")
+        })
     }
 }

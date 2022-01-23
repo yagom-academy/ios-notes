@@ -45,9 +45,6 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func touchUpActionButton(_ sender: Any) {
-        
-        print(UITraitCollection.current.horizontalSizeClass.rawValue)
-   
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         let share = UIAlertAction(title: "Share", style: .default) {
             (action) in
@@ -73,12 +70,8 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
     }
     
     private func shareAction() {
-        let shareText: String? = data?.title
-        var shareObject = [Any]()
-        shareObject.append(shareText)
-        let activityViewController = UIActivityViewController(activityItems : shareObject, applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view
-        self.present(activityViewController, animated: true, completion: nil)
+        guard let title = data?.title else { return }
+        self.delegate?.setShareAction(with: title, in: self)
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -140,26 +133,13 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
     }
     
     func deleteNote() {
-        guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return }
-        let context = container.viewContext
         guard let deleteData = data else { return }
-        context.delete(deleteData)
-        do {
-            try context.save()
-        } catch {
-            print(error)
-        }
+        guard let targetView = self.delegate else { return }
+        
+        self.delegate?.deleteNote(deleteData, andReload: targetView)
+
         noteTextView.text = ""
         data = nil
-        
-        self.delegate?.reloadTableView()
-        self.delegate?.firstNavigationController?.popViewController(animated: true)
 
-        // 액션버튼 클릭하고 나면 안댐.... 왜지...
-//        if UITraitCollection.current.horizontalSizeClass == .regular {
-//            self.delegate?.reloadTableView()
-//        } else if UITraitCollection.current.horizontalSizeClass == .compact {
-//            self.delegate?.firstNavigationController?.popViewController(animated: true)
-//        }
     }
 }
