@@ -80,7 +80,11 @@ final class NotesTableViewController: UITableViewController {
         guard let noteViewController = secondNavigationController?.children.first as? NoteViewController else { return }
         
         noteViewController.data = noteData
-        noteViewController.reload()
+        
+        if UITraitCollection.current.horizontalSizeClass == .regular {
+            // action 버튼 누르고 나면 얘가 안먹음
+            noteViewController.reload()
+        }
         
         guard let secondNavigationController = secondNavigationController else {
             return

@@ -7,10 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C237C6A32796FCF500DA36A5 /* Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C237C6A22796FCF500DA36A5 /* Decoder.swift */; };
-		C237C6A5279708D600DA36A5 /* NoteForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = C237C6A4279708D600DA36A5 /* NoteForm.swift */; };
 		C237C73E2798645400DA36A5 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = C237C73D2798645400DA36A5 /* .swiftlint.yml */; };
-		C237C7402798EFE600DA36A5 /* NewNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C237C73F2798EFE600DA36A5 /* NewNoteViewController.swift */; };
 		C237C74D279907C900DA36A5 /* UserNotes+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C237C74B279907C800DA36A5 /* UserNotes+CoreDataClass.swift */; };
 		C237C74E279907C900DA36A5 /* UserNotes+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C237C74C279907C900DA36A5 /* UserNotes+CoreDataProperties.swift */; };
 		C79B80C82794568900DA9780 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B80C72794568900DA9780 /* AppDelegate.swift */; };
@@ -25,10 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C237C6A22796FCF500DA36A5 /* Decoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decoder.swift; sourceTree = "<group>"; };
-		C237C6A4279708D600DA36A5 /* NoteForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteForm.swift; sourceTree = "<group>"; };
 		C237C73D2798645400DA36A5 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
-		C237C73F2798EFE600DA36A5 /* NewNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewNoteViewController.swift; sourceTree = "<group>"; };
 		C237C74B279907C800DA36A5 /* UserNotes+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserNotes+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C237C74C279907C900DA36A5 /* UserNotes+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserNotes+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C79B80C42794568900DA9780 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,8 +75,6 @@
 				C79B80E5279461F800DA9780 /* View */,
 				C79B80E4279461EA00DA9780 /* Controller */,
 				C79B80D82794568A00DA9780 /* Info.plist */,
-				C237C6A22796FCF500DA36A5 /* Decoder.swift */,
-				C237C6A4279708D600DA36A5 /* NoteForm.swift */,
 			);
 			path = Notes;
 			sourceTree = "<group>";
@@ -94,7 +86,6 @@
 				C79B80C92794568900DA9780 /* SceneDelegate.swift */,
 				C79B80DE279458CA00DA9780 /* NotesTableViewController.swift */,
 				C79B80E0279458D700DA9780 /* NoteViewController.swift */,
-				C237C73F2798EFE600DA36A5 /* NewNoteViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -217,11 +208,8 @@
 				C237C74D279907C900DA36A5 /* UserNotes+CoreDataClass.swift in Sources */,
 				C79B80E1279458D700DA9780 /* NoteViewController.swift in Sources */,
 				C79B80E327945C3400DA9780 /* NoteTableViewCell.swift in Sources */,
-				C237C6A5279708D600DA36A5 /* NoteForm.swift in Sources */,
 				C237C74E279907C900DA36A5 /* UserNotes+CoreDataProperties.swift in Sources */,
 				C79B80DF279458CA00DA9780 /* NotesTableViewController.swift in Sources */,
-				C237C6A32796FCF500DA36A5 /* Decoder.swift in Sources */,
-				C237C7402798EFE600DA36A5 /* NewNoteViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

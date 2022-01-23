@@ -16,7 +16,6 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
     var data: UserNotes?
     
     override func viewDidLoad() {
-        print("note view did load")
         super.viewDidLoad()
         noteTextView.delegate = self
         noteTextView.text = ""
@@ -29,6 +28,10 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
         noteTextView.setContentOffset(CGPoint.zero, animated: false)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        setData()
+    }
+    
     private func setData() {
         if let title = data?.title, let noteBody = data?.noteBody {
             noteTextView.text = "\(title)\n\(noteBody)"
@@ -38,7 +41,7 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
     }
     
     func reload() {
-        setData()
+         setData()
     }
     
     @IBAction func touchUpActionButton(_ sender: Any) {
@@ -110,7 +113,7 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
         
         var stringComponents = noteTextView.text.split(separator: "\n")
         if stringComponents.count == 0 {
-            // delete note
+            deleteNote()
             return
         }
         data?.setValue(stringComponents[0], forKey: "title")
@@ -128,7 +131,25 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
     }
     
     private func deleteNote() {
+        guard let container: NSPersistentContainer = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer else { return }
+        let context = container.viewContext
+        guard let deleteData = data else { return }
+        context.delete(deleteData)
+        do {
+            try context.save()
+        } catch {
+            print(error)
+        }
+        noteTextView.text = ""
+        data = nil
         
         self.delegate?.reloadTableView()
+        self.delegate?.firstNavigationController?.popViewController(animated: true)
+
+//        if UITraitCollection.current.horizontalSizeClass == .regular {
+//            self.delegate?.reloadTableView()
+//        } else if UITraitCollection.current.horizontalSizeClass == .compact {
+//            self.delegate?.firstNavigationController?.popViewController(animated: true)
+//        }
     }
 }
