@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vXc-KE-pfv">
-    <device id="retina5_5" orientation="portrait" appearance="light"/>
+    <device id="retina5_5" orientation="landscape" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
@@ -14,11 +14,11 @@
             <objects>
                 <viewController storyboardIdentifier="NoteVC" id="7Zy-wL-KH2" customClass="NoteViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="C1c-2m-ZpA">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="415.66666666666663" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="si1-vC-9zx">
-                                <rect key="frame" x="0.0" y="44" width="414" height="692"/>
+                                <rect key="frame" x="0.0" y="44" width="415.66666666666669" height="370"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <string key="text">나방이 홓ㄹ로호롤ㄹ로로롤로롤롤로 나방이 홓ㄹ로호롤ㄹ로로롤로롤롤로 나방이 홓ㄹ로롤롤ㄹ로로로ㅗ롤로롤
 
@@ -49,6 +49,7 @@ When, while the lovely valley teems with vapour around me, and the meridian sun 
                         <barButtonItem key="rightBarButtonItem" title="Item" image="ellipsis.circle" catalog="system" id="iEG-qn-xw6"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="actionButton" destination="iEG-qn-xw6" id="yt7-ZB-Gbg"/>
                         <outlet property="noteTextView" destination="si1-vC-9zx" id="E0Z-CE-L2I"/>
                     </connections>
                 </viewController>
@@ -61,22 +62,22 @@ When, while the lovely valley teems with vapour around me, and the meridian sun 
             <objects>
                 <tableViewController clearsSelectionOnViewWillAppear="NO" id="KwD-9G-w4t" customClass="NotesTableViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="LSt-bh-HXT">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="420" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="NoteTableViewCell" rowHeight="107" id="GO8-ec-4NV" customClass="NoteTableViewCell" customModule="Notes" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44.666666030883789" width="414" height="107"/>
+                                <rect key="frame" x="0.0" y="44.666666030883789" width="420" height="107"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="GO8-ec-4NV" id="Fqt-pX-l5U">
-                                    <rect key="frame" x="0.0" y="0.0" width="385.33333333333331" height="107"/>
+                                    <rect key="frame" x="100" y="0.0" width="291.33333333333331" height="107"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="99L-Tu-CrH">
-                                            <rect key="frame" x="20" y="11" width="357.33333333333331" height="85"/>
+                                            <rect key="frame" x="20" y="11" width="363.33333333333331" height="85"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="똘기떵이호치새초미자축인묘드라고요롱이마초미미진사오미" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BlW-7Y-uzr">
-                                                    <rect key="frame" x="0.0" y="0.0" width="357.33333333333331" height="23"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="363.33333333333331" height="23"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -140,7 +141,7 @@ When, while the lovely valley teems with vapour around me, and the meridian sun 
             <objects>
                 <navigationController id="b0H-9p-OiM" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="BeE-ar-Oqa">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="420" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -170,7 +171,7 @@ When, while the lovely valley teems with vapour around me, and the meridian sun 
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Zt9-U1-hJ8" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gZQ-TI-zJL">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="415.66666666666663" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

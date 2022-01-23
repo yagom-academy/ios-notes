@@ -29,6 +29,10 @@ final class NotesTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        reloadTableView()
+    }
+    
+    func reloadTableView() {
         self.notes = fetchNoteData()
         self.notes.reverse()
         noteListTable.reloadData()
@@ -58,7 +62,7 @@ final class NotesTableViewController: UITableViewController {
             return
         }
 
-        splitViewController?.showDetailViewController(secondNavigationController,sender: self)
+        splitViewController?.showDetailViewController(secondNavigationController, sender: self)
         
     }
     
@@ -86,7 +90,6 @@ final class NotesTableViewController: UITableViewController {
         if UITraitCollection.current.horizontalSizeClass == .regular {
             noteViewController.reload()
         }
-        
         guard let secondNavigationController = secondNavigationController else {
             return
         }

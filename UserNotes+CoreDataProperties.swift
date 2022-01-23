@@ -21,6 +21,6 @@ extension UserNotes {
     @NSManaged public var lastModifiedDate: Double
 }
 
-extension UserNotes : Identifiable {
+extension UserNotes: Identifiable {
 
 }

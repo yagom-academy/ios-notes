@@ -10,20 +10,24 @@ import CoreData
 final class NoteViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet private weak var noteTextView: UITextView!
+    @IBOutlet weak var actionButton: UIBarButtonItem!
+    
+    var delegate: NotesTableViewController?
+    
     var data: UserNotes?
     
     override func viewDidLoad() {
+        print("note view did load")
         super.viewDidLoad()
         noteTextView.delegate = self
-        
+        noteTextView.text = ""
         noteTextView.adjustsFontForContentSizeCategory = true
         noteTextView.font = UIFont.preferredFont(forTextStyle: .body)
-    
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        setData()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        setData()
+//    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -31,7 +35,6 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
     }
     
     private func setData() {
-        
         if let title = data?.title, let noteBody = data?.noteBody {
             noteTextView.text = "\(title)\n\(noteBody)"
         } else {
@@ -51,6 +54,7 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
         } else {
             updateNote(context)
         }
+        self.delegate?.reloadTableView()
     }
     
     func saveNewNote(_ context: NSManagedObjectContext) {
@@ -80,30 +84,24 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
     }
     
     func updateNote(_ context: NSManagedObjectContext) {
-        let updateRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "UserNotes")
-        updateRequest.predicate = NSPredicate(format: "id == %@", data!.id as NSUUID)
+        
+        var stringComponents = noteTextView.text.split(separator: "\n")
+        if stringComponents.count == 0 {
+            // delete note
+            return
+        }
+        data?.setValue(stringComponents[0], forKey: "title")
+        stringComponents.remove(at: 0)
+        data?.setValue(stringComponents.joined(separator: "\n"), forKey: "noteBody")
+
+        let time = Double(Date().timeIntervalSince1970)
+        data?.setValue(time, forKey: "lastModifiedDate")
+        
         do {
-            let updateObject = try context.fetch(updateRequest)[0] as? NSManagedObject
-            var stringComponents = noteTextView.text.split(separator: "\n")
-            if stringComponents.count == 0 {
-                // delete note
-                return
-            }
-            updateObject?.setValue(stringComponents[0], forKey: "title")
-            stringComponents.remove(at: 0)
-            updateObject?.setValue(stringComponents.joined(separator: "\n"), forKey: "noteBody")
-            
-            let time = Double(Date().timeIntervalSince1970)
-            updateObject?.setValue(time, forKey: "lastModifiedDate")
-            
-            do {
-                try context.save()
-            } catch {
-                print(error)
-            }
-            
+            try context.save()
         } catch {
             print(error)
         }
+        
     }
 }

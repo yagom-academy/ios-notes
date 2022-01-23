@@ -23,6 +23,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         firstNavigationController = splitViewController.viewControllers.first as? UINavigationController
         secondNavigationController = splitViewController.viewControllers.last as? UINavigationController
+        
+        let tableViewController = firstNavigationController?.children.first as? NotesTableViewController
+        let noteViewController = secondNavigationController?.children.first as? NoteViewController
+        
+        noteViewController?.delegate = tableViewController
+        
         splitViewController.delegate = self
     }
 
@@ -66,8 +72,8 @@ extension SceneDelegate: UISplitViewControllerDelegate {
     }
 
     func splitViewController(_ splitViewController: UISplitViewController,
-        collapseSecondary secondaryViewController:UIViewController,
-        onto primaryViewController:UIViewController) -> Bool {
+        collapseSecondary secondaryViewController: UIViewController,
+        onto primaryViewController: UIViewController) -> Bool {
         return true
     }
 }
