@@ -146,6 +146,7 @@ final class NoteViewController: UIViewController, UITextViewDelegate {
         self.delegate?.reloadTableView()
         self.delegate?.firstNavigationController?.popViewController(animated: true)
 
+        // 액션버튼 클릭하고 나면 안댐.... 왜지...
 //        if UITraitCollection.current.horizontalSizeClass == .regular {
 //            self.delegate?.reloadTableView()
 //        } else if UITraitCollection.current.horizontalSizeClass == .compact {
