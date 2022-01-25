@@ -31,16 +31,6 @@ final class NoteViewController: UIViewController {
         appDelegate.saveContext()
     }
     
-    func showDeleteAlert() {
-        let alertController = UIAlertController(title: "진짜요?", message: "정말로 삭제하시겠어요?", preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        let delete = UIAlertAction(title: "삭제", style: .destructive, handler: { _ in self.deleteNote() })
-        
-        alertController.addAction(cancel)
-        alertController.addAction(delete)
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
     func deleteNote() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = appDelegate.persistentContainer.viewContext
@@ -53,6 +43,16 @@ final class NoteViewController: UIViewController {
             guard let secondNavigationController: UINavigationController = splitViewController?.viewControllers[0] as? UINavigationController else { return }
             secondNavigationController.viewWillAppear(true)
         }
+    }
+    
+    func showDeleteAlert() {
+        let alertController = UIAlertController(title: "진짜요?", message: "정말로 삭제하시겠어요?", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let delete = UIAlertAction(title: "삭제", style: .destructive, handler: { _ in self.deleteNote() })
+        
+        alertController.addAction(cancel)
+        alertController.addAction(delete)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     func showActivityView() {
