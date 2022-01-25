@@ -31,9 +31,10 @@ final class NotesTableViewController: UITableViewController {
     public func loadCoreData() {
         guard let context = appDelegate?.persistentContainer.viewContext else {return}
         let fetchRequest = NoteEntity.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
         do {
             notes = try context.fetch(fetchRequest)
-            notes.reverse() // 시간 역순으로 정렬하기.. 추후 수정
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }

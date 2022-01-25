@@ -28,15 +28,7 @@ final class NoteViewController: UIViewController {
         let data = NoteEntity(context: context)
         data.title = (noteTextView.text).components(separatedBy: CharacterSet.newlines).first
         data.body = noteTextView.text
-        do {
-            if note != nil {
-                deleteNote()
-            }
-            try context.save()
-            NotificationCenter.default.post(name: Notification.Name("CoreDataChanged"), object: nil)
-        } catch {
-            print("save error")
-        }
+        appDelegate.saveContext()
     }
     
     func showDeleteAlert() {
@@ -54,12 +46,7 @@ final class NoteViewController: UIViewController {
         let context = appDelegate.persistentContainer.viewContext
         guard let note = note else { return }
         context.delete(note)
-        do {
-            try context.save()
-            NotificationCenter.default.post(name: Notification.Name("CoreDataChanged"), object: nil)
-        } catch {
-            print("delete fail")
-        }
+        appDelegate.saveContext()
         
         navigationController?.popViewController(animated: true)
         if UITraitCollection.current.horizontalSizeClass == .regular {
