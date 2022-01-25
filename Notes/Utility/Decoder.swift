@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 struct Decoder {
-    static func decodeJSONData<T: Decodable> (type: T.Type, from: String) -> T? {
+    func decodeJSONData<T: Decodable> (type: T.Type, from: String) -> T? {
         guard let items = NSDataAsset.init(name: from) else {
             fatalError("no file")
         }

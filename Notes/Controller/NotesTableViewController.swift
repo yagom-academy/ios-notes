@@ -3,32 +3,22 @@ import UIKit
 final class NotesTableViewController: UITableViewController {
 
     @IBOutlet weak var plus: UIBarButtonItem!
-    private var noteCoreDatas: [NoteEntity] = []
-    private var noteDataObservation: NSKeyValueObservation?
+    private var notes: [NoteEntity] = []
+    weak var notificationCenter = NotificationCenter.default
     weak var appDelegate = UIApplication.shared.delegate as? AppDelegate
     weak var sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        let notes = Decoder.decodeJSONData(type: [Note].self, from: "sample") ?? []
-//        guard let context = appDelegate?.persistentContainer.viewContext else {return}
-//        let fetchRequest = NoteEntity.fetchRequest()
         loadCoreData()
-        // Uncomment the following line to preserve selection between presentations
+        notificationCenter?.addObserver(self, selector: #selector(noteUpdated(_:)), name: nil, object: nil)
+        
          self.clearsSelectionOnViewWillAppear = true
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        loadCoreData()
-        tableView.reloadData()
     }
 
     @IBAction func addMemo(_ sender: Any) {
         let noteView: NoteViewController = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as? NoteViewController ?? NoteViewController()
-//        noteView.configureView(data: noteEntity)
         if UITraitCollection.current.horizontalSizeClass == .compact {
             navigationController?.pushViewController(noteView, animated: true)
         } else {
@@ -42,12 +32,19 @@ final class NotesTableViewController: UITableViewController {
         guard let context = appDelegate?.persistentContainer.viewContext else {return}
         let fetchRequest = NoteEntity.fetchRequest()
         do {
-            noteCoreDatas = try context.fetch(fetchRequest)
-            noteCoreDatas.reverse() // 시간 역순으로 정렬하기.. 추후 수정
-            tableView.reloadData()
+            notes = try context.fetch(fetchRequest)
+            notes.reverse() // 시간 역순으로 정렬하기.. 추후 수정
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         } catch {
             print(error)
         }
+    }
+
+    @objc
+    func noteUpdated(_ notification: Notification) {
+        loadCoreData()
     }
     
     // MARK: - Table view data source
@@ -56,19 +53,19 @@ final class NotesTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return noteCoreDatas.count
+        return notes.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteTableViewCell.reuseIdentifier,
                                                  for: indexPath) as? NoteTableViewCell ?? NoteTableViewCell()
-        cell.configureCell(data: noteCoreDatas[indexPath.row])
+        cell.configureCell(data: notes[indexPath.row])
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let noteView: NoteViewController = storyboard?.instantiateViewController(withIdentifier: "NoteVC") as? NoteViewController ?? NoteViewController()
-        noteView.configureView(data: noteCoreDatas[indexPath.row])
+        noteView.configureView(data: notes[indexPath.row])
         
         if UITraitCollection.current.horizontalSizeClass == .compact {
             navigationController?.pushViewController(noteView, animated: true)

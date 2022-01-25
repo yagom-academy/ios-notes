@@ -1,9 +1,3 @@
-//
-//  Notes - NoteViewController.swift
-//  Created by yagom.
-//  Copyright © yagom. All rights reserved.
-//
-
 import UIKit
 
 final class NoteViewController: UIViewController {
@@ -22,10 +16,6 @@ final class NoteViewController: UIViewController {
         if note == nil && !noteTextView.text.isEmpty {
             saveNote()
         }
-        if UITraitCollection.current.horizontalSizeClass == .regular {
-            guard let secondNavigationController: NotesTableViewController = splitViewController?.viewControllers[0] as? NotesTableViewController else { return }
-            secondNavigationController.viewWillAppear(true)
-        }
     }
     
     func configureView(data: NoteEntity) {
@@ -39,10 +29,11 @@ final class NoteViewController: UIViewController {
         data.title = (noteTextView.text).components(separatedBy: CharacterSet.newlines).first
         data.body = noteTextView.text
         do {
-            if let note = note {
+            if note != nil {
                 deleteNote()
             }
             try context.save()
+            NotificationCenter.default.post(name: Notification.Name("CoreDataChanged"), object: nil)
         } catch {
             print("save error")
         }
@@ -65,6 +56,7 @@ final class NoteViewController: UIViewController {
         context.delete(note)
         do {
             try context.save()
+            NotificationCenter.default.post(name: Notification.Name("CoreDataChanged"), object: nil)
         } catch {
             print("delete fail")
         }
@@ -77,7 +69,7 @@ final class NoteViewController: UIViewController {
     }
     
     func showActivityView() {
-        let activityViewController: UIActivityViewController = UIActivityViewController(activityItems: [note?.title, note?.body], applicationActivities: nil)
+        let activityViewController: UIActivityViewController = UIActivityViewController(activityItems: [note?.title ?? "", note?.body ?? ""], applicationActivities: nil)
         self.present(activityViewController, animated: true, completion: nil)
     }
     

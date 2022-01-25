@@ -29,7 +29,7 @@
             <objects>
                 <viewController storyboardIdentifier="NoteVC" id="7Zy-wL-KH2" customClass="NoteViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="C1c-2m-ZpA">
-                        <rect key="frame" x="0.0" y="0.0" width="575" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="575.5" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="si1-vC-9zx">
@@ -74,7 +74,7 @@ When, while the lovely valley teems with vapour around me, and the meridian sun 
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ogx-Ot-oN6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="83.705357142857139" y="1028.985507246377"/>
+            <point key="canvasLocation" x="112" y="1029"/>
         </scene>
         <!--메모-->
         <scene sceneID="E0l-Cy-Azn">
